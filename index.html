@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Mili - 基于 Paper -> Folia -> Luminol -> Mili 的高性能 Minecraft 服务端，集成 Rust 原生加速与 TOML 配置系统">
+    <meta name="author" content="Mili Project">
+    <meta property="og:title" content="Mili - High-Performance Minecraft Server">
+    <meta property="og:description" content="Folia 并发环境下的稳定运行时，Rust JNI 原生加速">
+    <meta property="og:type" content="website">
+    <title>Mili - High-Performance Minecraft Server</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127837;</text></svg>" />
+</head>
+<body>
+    <!-- ========== Navigation ========== -->
+    <nav id="navbar" class="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon">&#127837;</span>
+                <span class="logo-text">Mili</span>
+            </a>
+            <div class="nav-links" id="navLinks">
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#architecture" class="nav-link">Architecture</a>
+                <a href="#rust" class="nav-link">Rust Engine</a>
+                <a href="#config" class="nav-link">Config</a>
+                <a href="#quickstart" class="nav-link">Quick Start</a>
+                <a href="https://github.com/xucy10/Mili" class="nav-link nav-github" target="_blank" rel="noopener">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                    GitHub
+                </a>
+            </div>
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            </button>
+            <button class="nav-menu-btn" id="navMenuBtn" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ========== Hero Section ========== -->
+    <section id="hero" class="hero">
+        <div class="hero-bg-grid"></div>
+        <div class="hero-bg-glow"></div>
+        <div class="hero-content">
+            <div class="hero-badge reveal">
+                <span class="pulse-dot"></span>
+                <span>MC 1.21.11 &middot; Folia-Powered &middot; Rust-Accelerated</span>
+            </div>
+            <h1 class="hero-title reveal">
+                <span class="gradient-text">Mili</span>
+            </h1>
+            <p class="hero-subtitle reveal">
+                Paper &rarr; Folia &rarr; Luminol &rarr; Mili<br>
+                <span class="hero-tagline">Folia 并发环境下的稳定运行时，Rust 原生加速，TOML 配置系统</span>
+            </p>
+            <div class="hero-actions reveal">
+                <a href="#quickstart" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    Quick Start
+                </a>
+                <a href="https://github.com/xucy10/Mili/releases" class="btn btn-secondary" target="_blank" rel="noopener">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download
+                </a>
+            </div>
+            <div class="hero-stats reveal">
+                <div class="stat">
+                    <span class="stat-value">GPLv3</span>
+                    <span class="stat-label">License</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">JDK 21</span>
+                    <span class="stat-label">Runtime</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">Rust</span>
+                    <span class="stat-label">Native Engine</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">50+</span>
+                    <span class="stat-label">Config Modules</span>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span></span>
+        </div>
+    </section>
+
+    <!-- ========== Features Section ========== -->
+    <section id="features" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Features</span>
+                <h2 class="section-title">Why Mili?</h2>
+                <p class="section-desc">在 Folia 区域多线程调度模型上构建的增强运行时</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                    </div>
+                    <h3>Rust Native Acceleration</h3>
+                    <p>通过 JNI 桥接的 Rust 原生库 (<code>mili_optimizer</code>) 加速高频计算路径。批量处理设计消除逐实体 JNI 开销，光照计算、遮挡剔除等热点路径直接在原生层完成。</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+                    </div>
+                    <h3>TOML Config System</h3>
+                    <p>使用 Rust <code>toml_edit</code> 引擎替代 NightConfig，通过 JSON 批量传输在 JNI 边界高效传递配置数据。完整保留注释，支持热重载与递归删除。</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
+                    <h3>Folia Region Balancer</h3>
+                    <p>共享线程池 + 优先级队列替代 Folia 的每区域独占线程。无锁滑动窗口统计 tick 耗时，根据实时负载动态分配 CPU 资源，低负载区域自动合并执行。</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                    </div>
+                    <h3>50+ Config Modules</h3>
+                    <p>覆盖实验性功能、漏洞修复、功能特性、协议兼容、杂项与性能优化六大类别。包括异步寻路、区块增量压缩、动态视距、实体密度热力图等高级选项。</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </div>
+                    <h3>Multiple Archive Formats</h3>
+                    <p>支持原版、Linear 和 b_linear 存档格式。MmapRegionStorage 提供内存映射加速的区域存储，ChunkDeltaCompression 减少网络带宽占用。</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <h3>Redstone Enhancements</h3>
+                    <p>针对 Folia 区域调度的红石与生存电路兼容性增强。RedstoneDirtyTracking 优化红石更新追踪，RedstoneStats 提供统计分析，在多线程环境下更稳定。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Architecture Section ========== -->
+    <section id="architecture" class="section section-alt">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Architecture</span>
+                <h2 class="section-title">Inheritance Chain</h2>
+                <p class="section-desc">基于 Hyacinthusweight 补丁系统的多层 Fork 架构</p>
+            </div>
+            <div class="arch-chain reveal">
+                <div class="arch-node">
+                    <div class="arch-node-icon">&#127837;</div>
+                    <div class="arch-node-name">Minecraft</div>
+                    <div class="arch-node-desc">Vanilla</div>
+                </div>
+                <div class="arch-arrow">&rarr;</div>
+                <div class="arch-node">
+                    <div class="arch-node-icon">&#128230;</div>
+                    <div class="arch-node-name">Paper</div>
+                    <div class="arch-node-desc">Server Framework</div>
+                </div>
+                <div class="arch-arrow">&rarr;</div>
+                <div class="arch-node">
+                    <div class="arch-node-icon">&#129520;</div>
+                    <div class="arch-node-name">Folia</div>
+                    <div class="arch-node-desc">Region Multithreading</div>
+                </div>
+                <div class="arch-arrow">&rarr;</div>
+                <div class="arch-node">
+                    <div class="arch-node-icon">&#9889;</div>
+                    <div class="arch-node-name">Luminol</div>
+                    <div class="arch-node-desc">Performance Fork</div>
+                </div>
+                <div class="arch-arrow">&rarr;</div>
+                <div class="arch-node arch-node-highlight">
+                    <div class="arch-node-icon">&#127837;</div>
+                    <div class="arch-node-name">Mili</div>
+                    <div class="arch-node-desc">Rust + Stability</div>
+                </div>
+            </div>
+            <div class="arch-modules reveal">
+                <div class="arch-module">
+                    <span class="arch-module-tag">API</span>
+                    <div class="arch-module-body">
+                        <code>mili-api</code>
+                        <code>luminol-api</code>
+                        <code>folia-api</code>
+                        <code>paper-api</code>
+                    </div>
+                    <p>对外暴露的 API 与兼容适配层</p>
+                </div>
+                <div class="arch-module">
+                    <span class="arch-module-tag">Server</span>
+                    <div class="arch-module-body">
+                        <code>mili-server</code>
+                        <code>luminol-server</code>
+                        <code>folia-server</code>
+                        <code>paper-server</code>
+                    </div>
+                    <p>服务端核心逻辑的补丁与增强实现</p>
+                </div>
+                <div class="arch-module arch-module-highlight">
+                    <span class="arch-module-tag">Native</span>
+                    <div class="arch-module-body">
+                        <code>mili-rust</code>
+                    </div>
+                    <p>Rust JNI 原生优化模块 (toml_edit, serde, jni)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Rust Engine Section ========== -->
+    <section id="rust" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Rust Engine</span>
+                <h2 class="section-title">Native Acceleration</h2>
+                <p class="section-desc">Rust + JNI 批量处理架构</p>
+            </div>
+            <div class="rust-content">
+                <div class="rust-diagram reveal">
+                    <div class="rust-layer rust-layer-java">
+                        <div class="rust-layer-title">Java (mili-server)</div>
+                        <div class="rust-layer-items">
+                            <span>TomlConfigData</span>
+                            <span>RustBridge</span>
+                            <span>ConfigsInstance</span>
+                            <span>ConfigManager</span>
+                        </div>
+                    </div>
+                    <div class="rust-bridge">
+                        <div class="rust-bridge-label">JNI Boundary</div>
+                        <div class="rust-bridge-protocol">
+                            <div>JSON Bulk Transfer</div>
+                            <div>Batch Processing</div>
+                            <div>Zero per-entity calls</div>
+                        </div>
+                    </div>
+                    <div class="rust-layer rust-layer-native">
+                        <div class="rust-layer-title">Rust (mili_optimizer)</div>
+                        <div class="rust-layer-items">
+                            <span>toml_edit</span>
+                            <span>serde_json</span>
+                            <span>jni-rs</span>
+                            <span>rayon</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="rust-features reveal">
+                    <div class="rust-feature">
+                        <h4>TOML Engine</h4>
+                        <p>Rust <code>toml_edit</code> 替代 NightConfig 的 <code>CommentedFileConfig</code>。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。</p>
+                        <div class="rust-code-block">
+<span style="color:var(--syntax-key)">pub fn</span> load_config(path: &<span style="color:var(--syntax-type)">str</span>) -> <span style="color:var(--syntax-type)">Option</span>&lt;<span style="color:var(--syntax-type)">String</span>&gt; {
+    <span style="color:var(--syntax-key)">let</span> content = fs::read_to_string(path).ok()?;
+    parse_toml_to_json(&content)
+}</div>
+                    </div>
+                    <div class="rust-feature">
+                        <h4>Batch JNI Design</h4>
+                        <p>Java 侧收集每帧数据到扁平数组，一次性传递给 Rust 处理并接收结果。消除逐实体 JNI 调用开销，光照计算和遮挡剔除在原生层并行完成。</p>
+                        <div class="rust-code-block">
+<span style="color:var(--syntax-comment)">// Java side: collect -> batch call -> receive results</span>
+<span style="color:var(--syntax-key)">int</span>[] result = RustBridge.processLightmap(
+    flatLightData, width, height
+);</div>
+                    </div>
+                    <div class="rust-feature">
+                        <h4>Cross-Platform</h4>
+                        <p>自动检测操作系统并加载对应的原生库：<code>mili_optimizer.dll</code> (Windows)、<code>libmili_optimizer.so</code> (Linux)、<code>libmili_optimizer.dylib</code> (macOS)。</p>
+                        <div class="rust-code-block">
+<span style="color:var(--syntax-comment)">// Extracted from JAR at runtime</span>
+Path dst = tmp.resolve(lib);
+System.load(dst.toAbsolutePath().toString());</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Config System Section ========== -->
+    <section id="config" class="section section-alt">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Configuration</span>
+                <h2 class="section-title">50+ Config Modules</h2>
+                <p class="section-desc">六大类别的可配置选项，覆盖从性能到功能的全面控制</p>
+            </div>
+            <div class="config-grid">
+                <div class="config-card reveal">
+                    <div class="config-card-header">
+                        <span class="config-badge config-badge-exp">Experiment</span>
+                        <span class="config-count">7 modules</span>
+                    </div>
+                    <h3>Experimental Features</h3>
+                    <ul>
+                        <li>CommandConfig</li>
+                        <li>CrossRegionHelper</li>
+                        <li>EntityDamageSourceTrace</li>
+                        <li>GlobalEntitiesCounter</li>
+                        <li>RayTrackingEntityTracker</li>
+                        <li>RedStoneConfig</li>
+                        <li>RegionBalancerConfig</li>
+                    </ul>
+                </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header">
+                        <span class="config-badge config-badge-fix">Fixes</span>
+                        <span class="config-count">2 modules</span>
+                    </div>
+                    <h3>Bug Fixes</h3>
+                    <ul>
+                        <li>PortalLinkFix</li>
+                        <li>UpdateSuppressionCrashFix</li>
+                    </ul>
+                </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header">
+                        <span class="config-badge config-badge-func">Function</span>
+                        <span class="config-count">13+8 modules</span>
+                    </div>
+                    <h3>Function Features</h3>
+                    <ul>
+                        <li>AutoBackup</li>
+                        <li>Fakeplayer</li>
+                        <li>PerformanceMonitor</li>
+                        <li>PlayerHeatmap</li>
+                        <li>RedstoneStats</li>
+                        <li>ReplayAPI</li>
+                        <li>StructureProjection</li>
+                        <li>WoolHopperCounter</li>
+                        <li>+ 8 Protocol modules</li>
+                    </ul>
+                </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header">
+                        <span class="config-badge config-badge-opt">Optimizations</span>
+                        <span class="config-count">13 modules</span>
+                    </div>
+                    <h3>Performance</h3>
+                    <ul>
+                        <li>AsyncPathfinding</li>
+                        <li>ChunkDeltaCompression</li>
+                        <li>DynamicViewDistance</li>
+                        <li>EntityDirtyTracking</li>
+                        <li>LightingCallback</li>
+                        <li>MmapRegionStorage</li>
+                        <li>RedstoneDirtyTracking</li>
+                        <li>VillagerOptimizer</li>
+                    </ul>
+                </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header">
+                        <span class="config-badge config-badge-misc">Misc</span>
+                        <span class="config-count">4 modules</span>
+                    </div>
+                    <h3>Miscellaneous</h3>
+                    <ul>
+                        <li>AutoUpdate</li>
+                        <li>BStats</li>
+                        <li>DisableCheck</li>
+                        <li>ItemEntity</li>
+                    </ul>
+                </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header">
+                        <span class="config-badge config-badge-toml">TOML</span>
+                        <span class="config-count">3 files</span>
+                    </div>
+                    <h3>Config Files</h3>
+                    <ul>
+                        <li><code>luminol_config.toml</code></li>
+                        <li><code>mili_config.toml</code></li>
+                        <li><code>mili_carpet_config.toml</code></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Quick Start Section ========== -->
+    <section id="quickstart" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label">Quick Start</span>
+                <h2 class="section-title">Get Started</h2>
+                <p class="section-desc">从源码构建或直接下载预编译版本</p>
+            </div>
+            <div class="qs-tabs reveal">
+                <button class="qs-tab active" data-tab="build">Build from Source</button>
+                <button class="qs-tab" data-tab="download">Download Release</button>
+            </div>
+            <div class="qs-content">
+                <div class="qs-panel active" data-panel="build">
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">1</div>
+                        <div class="qs-step-body">
+                            <h4>Clone the repository</h4>
+                            <div class="code-block">
+<span style="color:var(--syntax-comment)"># Clone & enter</span>
+git clone https://github.com/xucy10/Mili.git
+cd Mili</div>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">2</div>
+                        <div class="qs-step-body">
+                            <h4>Apply patches</h4>
+                            <div class="code-block">
+<span style="color:var(--syntax-comment)"># Requires JDK 21+ and Rust toolchain</span>
+<span style="color:var(--syntax-comment)"># Windows: enable core.longpaths=true</span>
+./gradlew applyAllPatches --no-configuration-cache</div>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">3</div>
+                        <div class="qs-step-body">
+                            <h4>Build the paperclip jar</h4>
+                            <div class="code-block">
+<span style="color:var(--syntax-comment)"># Inject Kotlin config & build</span>
+python scripts/inject_kotlin.py
+./gradlew :mili-server:createMojmapPaperclipJar</div>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">4</div>
+                        <div class="qs-step-body">
+                            <h4>Find your jar</h4>
+                            <div class="code-block">
+<span style="color:var(--syntax-comment)"># Output location</span>
+mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="qs-panel" data-panel="download">
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">1</div>
+                        <div class="qs-step-body">
+                            <h4>Download from GitHub Releases</h4>
+                            <p>Visit the <a href="https://github.com/xucy10/Mili/releases" class="inline-link" target="_blank" rel="noopener">Releases page</a> and download the latest <code>-mojmap.jar</code> file.</p>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">2</div>
+                        <div class="qs-step-body">
+                            <h4>Requirements</h4>
+                            <ul class="qs-list">
+                                <li>JDK 21 or higher</li>
+                                <li>Minecraft 1.21.11</li>
+                                <li>Recommended: 4+ CPU cores for Folia region threading</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">3</div>
+                        <div class="qs-step-body">
+                            <h4>Run the server</h4>
+                            <div class="code-block">java -jar mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar --nogui</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Footer ========== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="footer-logo">
+                        <span class="logo-icon">&#127837;</span>
+                        <span class="logo-text">Mili</span>
+                    </div>
+                    <p class="footer-desc">Paper &rarr; Folia &rarr; Luminol &rarr; Mili<br>High-performance Minecraft server with Rust acceleration.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <ul>
+                        <li><a href="https://github.com/xucy10/Mili" target="_blank" rel="noopener">GitHub Repository</a></li>
+                        <li><a href="https://github.com/xucy10/Mili/releases" target="_blank" rel="noopener">Releases</a></li>
+                        <li><a href="https://github.com/xucy10/Mili/blob/main/docs/WIKI.md" target="_blank" rel="noopener">Wiki (CN)</a></li>
+                        <li><a href="https://github.com/xucy10/Mili/blob/main/docs/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Inheritance</h4>
+                    <ul>
+                        <li><a href="https://github.com/PaperMC/Paper" target="_blank" rel="noopener">Paper</a></li>
+                        <li><a href="https://github.com/PaperMC/Folia" target="_blank" rel="noopener">Folia</a></li>
+                        <li><a href="https://github.com/LuminolMC/Luminol" target="_blank" rel="noopener">Luminol</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Tech Stack</h4>
+                    <ul>
+                        <li>Java 21 (LTS)</li>
+                        <li>Rust (stable)</li>
+                        <li>Gradle + Kotlin DSL</li>
+                        <li>Hyacinthusweight</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>Licensed under <a href="https://github.com/xucy10/Mili/blob/main/LICENSE.md" target="_blank" rel="noopener">GPLv3</a> (inherited from upstream) &middot; Contributors may choose MIT</p>
+                <p class="footer-copy">&copy; 2025 Mili Project. All rights reserved by contributors.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/main.js"></script>
+</body>
+</html>
