@@ -12,8 +12,8 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127837;</text></svg>">
 <style>
 /* ================================================================
-   Mili Website — Design System v3
-   重写：排版优化 · CSS 逻辑属性 · 流式间距 · 沉浸视差
+   Mili Website — Design System v4
+   同步 GitHub 仓库最新状态 · MC 26.2 · JDK 25+ · Rust edition 2024
    ================================================================ */
 
 /* ---- Reset ---- */
@@ -582,7 +582,7 @@ code {
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
-    margin-block-end: 56px;
+    margin-block-end: 24px;
 }
 .arch-node {
     background: var(--bg-card);
@@ -608,6 +608,19 @@ code {
 .arch-node-desc { font-size: 0.75rem; color: var(--t-3); }
 
 .arch-arrow { font-size: 1.5rem; color: var(--t-4); font-weight: 300; }
+
+.arch-note {
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto 56px;
+    padding: 16px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--bd);
+    border-radius: var(--r-md);
+    font-size: 0.88rem;
+    color: var(--t-3);
+    line-height: 1.7;
+}
 
 .arch-modules {
     display: grid;
@@ -752,6 +765,56 @@ code {
     margin-block-end: 12px;
 }
 
+.rust-safety {
+    background: var(--bg-card);
+    border: 1px solid var(--bd);
+    border-radius: var(--r-lg);
+    padding: 28px;
+    margin-block-start: 40px;
+}
+.rust-safety h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-block-end: 16px;
+    color: var(--t-1);
+}
+.rust-safety-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+    gap: 16px;
+}
+.rust-safety-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+.rust-safety-item-icon {
+    flex-shrink: 0;
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.2);
+    border-radius: 6px;
+    color: var(--c-green);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+.rust-safety-item-body { min-width: 0; }
+.rust-safety-item-body strong {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--t-1);
+    margin-block-end: 4px;
+}
+.rust-safety-item-body span {
+    font-size: 0.8rem;
+    color: var(--t-3);
+    line-height: 1.6;
+}
+
 .code-block, .rust-code-block {
     background: var(--bg-0);
     border: 1px solid var(--bd);
@@ -768,6 +831,54 @@ code {
     max-width: 100%;
     display: block;
     contain: content;
+}
+
+/* ================================================================
+   Protocols
+   ================================================================ */
+.protocols-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+    gap: 16px;
+}
+.protocol-card {
+    background: var(--bg-card);
+    border: 1px solid var(--bd);
+    border-radius: var(--r-md);
+    padding: 20px;
+    transition: all 0.2s var(--ease);
+    min-width: 0;
+}
+.protocol-card:hover {
+    border-color: var(--bd-s);
+    transform: translateY(-2px);
+    background: var(--bg-card-h);
+}
+.protocol-card-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-block-end: 8px;
+}
+.protocol-card-icon {
+    width: 32px; height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-3);
+    border-radius: var(--r-sm);
+    color: var(--c-orange);
+    flex-shrink: 0;
+}
+.protocol-card-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--t-1);
+}
+.protocol-card-desc {
+    font-size: 0.82rem;
+    color: var(--t-3);
+    line-height: 1.6;
 }
 
 /* ================================================================
@@ -807,7 +918,7 @@ code {
 .config-badge-func  { background: rgba(74, 222, 128, 0.12);  color: var(--c-green); }
 .config-badge-opt   { background: rgba(34, 211, 238, 0.12);  color: var(--c-cyan); }
 .config-badge-misc  { background: rgba(160, 160, 188, 0.12); color: var(--t-2); }
-.config-badge-toml  { background: rgba(255, 200, 61, 0.12);  color: var(--c-gold); }
+.config-badge-carpet{ background: rgba(255, 200, 61, 0.12);  color: var(--c-gold); }
 
 .config-count { font-size: 0.75rem; color: var(--t-3); font-weight: 600; }
 .config-card h3 { font-size: 1.1rem; font-weight: 700; margin-block-end: 16px; color: var(--t-1); }
@@ -830,7 +941,7 @@ code {
 }
 
 /* ================================================================
-   Quick Start
+   Quick Start & API Tabs
    ================================================================ */
 .qs-tabs {
     display: flex;
@@ -842,6 +953,7 @@ code {
     margin: 0 auto 32px;
     width: fit-content;
     max-width: 100%;
+    flex-wrap: wrap;
 }
 .qs-tab {
     padding: 10px 24px;
@@ -895,6 +1007,27 @@ code {
     font-weight: 700;
 }
 .inline-link { color: var(--c-orange); text-decoration: underline; text-underline-offset: 2px; }
+
+/* API section code blocks */
+.api-content { max-width: 840px; margin: 0 auto; }
+.api-panel { display: none; }
+.api-panel.active { display: block; }
+.api-panel h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-block-end: 16px;
+    color: var(--t-1);
+}
+.api-panel .code-block { font-size: 0.82rem; }
+.api-note {
+    margin-block-start: 20px;
+    padding: 16px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--bd);
+    border-radius: var(--r-md);
+    font-size: 0.85rem;
+    color: var(--t-3);
+}
 
 /* ================================================================
    Footer
@@ -1008,6 +1141,7 @@ code {
     .rust-diagram { padding: 20px; }
     .rust-layer { padding: 16px; }
     .rust-feature { padding: 20px; }
+    .rust-safety { padding: 20px; }
 
     /* Hero padding adjust */
     .hero { padding: 100px 16px 60px; }
@@ -1016,7 +1150,7 @@ code {
     .container, .nav-inner, .hero-content,
     .features-grid, .config-grid, .arch-chain, .arch-modules,
     .rust-content, .rust-diagram, .rust-features,
-    .footer-grid, .qs-content { max-width: 100%; }
+    .footer-grid, .qs-content, .api-content { max-width: 100%; }
 }
 
 @media (max-width: 480px) {
@@ -1025,6 +1159,7 @@ code {
     .hero-stats { grid-template-columns: 1fr 1fr; }
     .features-grid { grid-template-columns: 1fr; }
     .config-grid { grid-template-columns: 1fr; }
+    .protocols-grid { grid-template-columns: 1fr; }
     .qs-tabs { width: 100%; }
     .qs-tab { flex: 1; text-align: center; padding: 10px 12px; }
     .arch-node { min-width: 80px; flex: 1 1 80px; padding: 12px 8px; }
@@ -1046,8 +1181,10 @@ code {
                 <a href="#features" class="nav-link" data-i18n="nav.features">特性</a>
                 <a href="#architecture" class="nav-link" data-i18n="nav.architecture">架构</a>
                 <a href="#rust" class="nav-link" data-i18n="nav.rust">Rust 引擎</a>
+                <a href="#protocols" class="nav-link" data-i18n="nav.protocols">协议</a>
                 <a href="#config" class="nav-link" data-i18n="nav.config">配置</a>
                 <a href="#quickstart" class="nav-link" data-i18n="nav.quickstart">快速上手</a>
+                <a href="#api" class="nav-link" data-i18n="nav.api">API</a>
                 <a href="https://github.com/xucy10/Mili" class="nav-link nav-github" target="_blank" rel="noopener">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
                     GitHub
@@ -1071,12 +1208,12 @@ code {
         <div class="hero-content">
             <div class="hero-badge reveal">
                 <span class="pulse-dot"></span>
-                <span data-i18n="hero.badge">MC 1.21.11 &middot; Folia-Powered &middot; Rust-Accelerated</span>
+                <span data-i18n="hero.badge">MC 26.2 &middot; Folia-Powered &middot; Rust edition 2024</span>
             </div>
             <h1 class="hero-title reveal"><span class="gradient-text">Mili</span></h1>
             <p class="hero-subtitle reveal">
-                <span data-i18n="hero.subtitle">为生电而生的 Folia 高性能服务端核心</span><br>
-                <span class="hero-tagline" data-i18n="hero.tagline">Rust 原生加速 &middot; 红石全兼容 &middot; Carpet 协议支持 &middot; 假玩家系统</span>
+                <span data-i18n="hero.subtitle">基于 Folia 的高性能 Minecraft 服务端核心，融合 Rust 原生加速与深度生电兼容</span><br>
+                <span class="hero-tagline" data-i18n="hero.tagline">Rust 原生加速 &middot; 红石全兼容 &middot; Carpet 协议支持 &middot; 假玩家系统 &middot; ReplayMod 摄影师</span>
             </p>
             <div class="hero-actions reveal">
                 <a href="#quickstart" class="btn btn-primary">
@@ -1090,11 +1227,11 @@ code {
             </div>
             <div class="hero-stats reveal">
                 <div class="stat">
-                    <span class="stat-value">GPLv3</span>
+                    <span class="stat-value">GPL-3.0</span>
                     <span class="stat-label" data-i18n="hero.stats.license">License</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value">JDK 21</span>
+                    <span class="stat-value">JDK 25+</span>
                     <span class="stat-label" data-i18n="hero.stats.runtime">Runtime</span>
                 </div>
                 <div class="stat">
@@ -1102,8 +1239,8 @@ code {
                     <span class="stat-label" data-i18n="hero.stats.native">Native Engine</span>
                 </div>
                 <div class="stat">
-                    <span class="stat-value">50+</span>
-                    <span class="stat-label" data-i18n="hero.stats.modules">Config Modules</span>
+                    <span class="stat-value">121+</span>
+                    <span class="stat-label" data-i18n="hero.stats.modules">Feature Patches</span>
                 </div>
             </div>
         </div>
@@ -1122,7 +1259,7 @@ code {
                 <div class="feature-card reveal">
                     <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
                     <h3 data-i18n="features.rust.title">Rust 原生加速</h3>
-                    <p data-i18n="features.rust.desc">通过 JNI 桥接 Rust 原生库，加速实体视锥剔除、光照计算等高频路径。零拷贝 DirectByteBuffer + Rayon 并行，每 tick 仅需 M 次 JNI 调用而非 N×M 次。缺失时自动回退纯 Java。</p>
+                    <p data-i18n="features.rust.desc">通过 JNI 桥接 Rust 原生库（mili_optimizer.dll/.so/.dylib），加速实体视锥剔除、TOML 配置读写等高频路径。零拷贝 DirectByteBuffer + Rayon 并行，每 tick 仅需 M 次 JNI 调用而非 N*M 次。缺失时自动回退纯 Java。</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
@@ -1131,23 +1268,23 @@ code {
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-                    <h3 data-i18n="features.balancer.title">Folia 区域负载均衡</h3>
-                    <p data-i18n="features.balancer.desc">共享线程池 + 优先级队列替代每区域独占线程。无锁滑动窗口统计 tick 耗时，根据实时负载动态分配 CPU 资源，低负载区域自动合并执行，告别"一个区域卡全服"。</p>
+                    <h3 data-i18n="features.balancer.title">Folia 稳定性修复</h3>
+                    <p data-i18n="features.balancer.desc">Region Balancer 共享线程池 + 优先级队列替代每区域独占线程；无锁滑动窗口统计 tick 耗时；自适应 TPS 管理；跨区事件队列；全局 UUID 注册中心防碰撞；catch(Throwable) 加固防止 Error 导致调度器静默死亡。</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
                     <h3 data-i18n="features.redstone.title">红石与生电兼容</h3>
-                    <p data-i18n="features.redstone.desc">从 Leaves 移植的全套红石修复：更新抑制、红石忽略向上更新、即时方块更新器、旧方块移除行为、羊毛漏斗计数器。生电机器安心运行，原版行为一个不少。</p>
+                    <p data-i18n="features.redstone.desc">从 Leaves/Lophine 移植并适配 Folia 的全套红石修复：更新抑制（捕获异常防崩溃）、红石忽略向上更新、即时方块更新器、旧方块移除行为、羊毛漏斗计数器。生电机器安心运行，原版行为一个不少。</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
                     <h3 data-i18n="features.carpet.title">Carpet 与协议兼容</h3>
-                    <p data-i18n="features.carpet.desc">50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 实时同步。Jade、Syncmatica、XaeroMap、REI、BBOR、AppleSkin 等客户端 mod 协议全适配，连上即用。</p>
+                    <p data-i18n="features.carpet.desc">50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 实时同步。TISCM、Jade、Syncmatica、Servux、XaeroMap、REI、BBOR、AppleSkin 等客户端 mod 协议全适配。</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
-                    <h3 data-i18n="features.storage.title">多存档格式支持</h3>
-                    <p data-i18n="features.storage.desc">支持原版、Linear 和 b_linear 存档格式。MmapRegionStorage 提供内存映射加速的区域存储，ChunkDeltaCompression 减少网络带宽占用，多种优化可选。</p>
+                    <h3 data-i18n="features.storage.title">假玩家与摄影师</h3>
+                    <p data-i18n="features.storage.desc">从 Leaves 移植的假玩家系统：创建/管理/移除假玩家，常驻、背包操作、动作执行（攻击、破坏、钓鱼、跳跃、移动等），配套完整 Java 事件 API。ReplayMod 摄影师实体录像，Photographer / PhotographerManager API。</p>
                 </div>
             </div>
         </div>
@@ -1186,21 +1323,24 @@ code {
                     <div class="arch-node-desc" data-i18n="arch.node.mili">Rust + Stability</div>
                 </div>
             </div>
+            <div class="arch-note reveal">
+                <span data-i18n="arch.note">Mili 原为 Lophine/Luminol 的衍生分支，现已迁移为直接基于 Folia，将 Luminol 的优化源码内联合并。（Luminol 已在与 Canvas 争议中删库）</span>
+            </div>
             <div class="arch-modules reveal">
                 <div class="arch-module">
                     <span class="arch-module-tag">API</span>
                     <div class="arch-module-body"><code>mili-api</code><code>folia-api</code><code>paper-api</code></div>
-                    <p data-i18n="arch.module.api">对外暴露的 API 与兼容适配层</p>
+                    <p data-i18n="arch.module.api">对外暴露的 API 与兼容适配层，包含 Bot、Photographer、事件 API</p>
                 </div>
                 <div class="arch-module">
                     <span class="arch-module-tag">Server</span>
                     <div class="arch-module-body"><code>mili-server</code><code>folia-server</code><code>paper-server</code></div>
-                    <p data-i18n="arch.module.server">服务端核心逻辑的补丁与增强实现</p>
+                    <p data-i18n="arch.module.server">服务端核心逻辑的补丁与增强实现，121 个 feature 补丁</p>
                 </div>
                 <div class="arch-module arch-module-highlight">
                     <span class="arch-module-tag">Native</span>
                     <div class="arch-module-body"><code>mili-rust</code></div>
-                    <p data-i18n="arch.module.native">Rust JNI 原生优化模块 (toml_edit, serde, jni, rayon)</p>
+                    <p data-i18n="arch.module.native">Rust JNI 原生优化模块 (toml_edit, serde, jni, rayon, edition 2024)</p>
                 </div>
             </div>
         </div>
@@ -1212,7 +1352,7 @@ code {
             <div class="section-header reveal">
                 <span class="section-label" data-i18n="rust.label">Rust 引擎</span>
                 <h2 class="section-title" data-i18n="rust.title">原生加速架构</h2>
-                <p class="section-desc" data-i18n="rust.desc">Rust + JNI 批量处理，零拷贝传递，多核并行</p>
+                <p class="section-desc" data-i18n="rust.desc">Rust edition 2024 + JNI 批量处理，零拷贝传递，多核并行</p>
             </div>
             <div class="rust-content">
                 <div class="rust-diagram reveal">
@@ -1225,14 +1365,14 @@ code {
                         <div class="rust-bridge-protocol"><div>DirectByteBuffer</div><div>Batch Processing</div><div>Zero Copy</div></div>
                     </div>
                     <div class="rust-layer rust-layer-native">
-                        <div class="rust-layer-title">Rust (mili-rust)</div>
-                        <div class="rust-layer-items"><span>entity_cull.rs</span><span>frustum.rs</span><span>config.rs</span><span>jni_bridge.rs</span><span>rayon</span></div>
+                        <div class="rust-layer-title">Rust (mili-rust, edition 2024)</div>
+                        <div class="rust-layer-items"><span>entity_cull.rs</span><span>frustum.rs</span><span>config.rs</span><span>jni_bridge.rs</span><span>lib.rs</span><span>rayon</span></div>
                     </div>
                 </div>
                 <div class="rust-features reveal">
                     <div class="rust-feature">
                         <h4 data-i18n="rust.cull.title">实体视锥剔除</h4>
-                        <p data-i18n="rust.cull.desc">6 平面 AABB frustum 测试，Java 侧将实体数据打包进 DirectByteBuffer，Rust 通过 GetDirectBufferAddress 直接读取内存地址。每 tick 仅需 M 次 JNI 调用（M = 观察者数量），而非 N×M 次。</p>
+                        <p data-i18n="rust.cull.desc">6 平面 AABB frustum 测试，Java 侧将实体数据打包进 DirectByteBuffer，Rust 通过 GetDirectBufferAddress 直接读取内存地址。每 tick 仅需 M 次 JNI 调用（M = 观察者数量），而非 N*M 次。</p>
                         <div class="rust-code-block"><span style="color:var(--syn-c)">// Java: pack entities into buffer, one JNI call per observer</span>
 <span style="color:var(--syn-k)">var</span> buf = ByteBuffer.allocateDirect(entities.size() * <span style="color:var(--syn-n)">32</span>);
 <span style="color:var(--syn-k)">for</span> (<span style="color:var(--syn-k)">var</span> e : entities) { buf.putFloat(e.getX()); <span style="color:var(--syn-c)">/* ... */</span> }
@@ -1240,7 +1380,7 @@ code {
                     </div>
                     <div class="rust-feature">
                         <h4 data-i18n="rust.toml.title">TOML 配置引擎</h4>
-                        <p data-i18n="rust.toml.desc">Rust toml_edit 替代 NightConfig。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。</p>
+                        <p data-i18n="rust.toml.desc">Rust toml_edit 替代 NightConfig。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。支持热重载与递归删除。</p>
                         <div class="rust-code-block"><span style="color:var(--syn-k)">pub fn</span> load_config(path: &<span style="color:var(--syn-t)">str</span>) -> <span style="color:var(--syn-t)">Option</span>&lt;<span style="color:var(--syn-t)">String</span>&gt; {
     <span style="color:var(--syn-k)">let</span> content = fs::read_to_string(path).ok()?;
     parse_toml_to_json(&content)
@@ -1248,7 +1388,7 @@ code {
                     </div>
                     <div class="rust-feature">
                         <h4 data-i18n="rust.cross.title">跨平台原生库</h4>
-                        <p data-i18n="rust.cross.desc">自动检测操作系统并从 JAR 中释放对应的原生库：Windows .dll、Linux .so、macOS .dylib。缺失时自动回退纯 Java 实现。</p>
+                        <p data-i18n="rust.cross.desc">自动检测操作系统并从 JAR 中释放对应的原生库：Windows .dll、Linux .so、macOS .dylib。缺失时自动回退纯 Java 实现。Rust 单独编译支持 cargo clippy（0 warning）与 cargo test（28 个单元测试）。</p>
                         <div class="rust-code-block"><span style="color:var(--syn-c)">// Extract native lib from JAR at runtime</span>
 <span style="color:var(--syn-t)">Path</span> dst = tmp.resolve(lib);
 <span style="color:var(--syn-t)">Files</span>.copy(jarEntry, dst, REPLACE_EXISTING);
@@ -1256,78 +1396,201 @@ code {
                     </div>
                 </div>
             </div>
+            <div class="rust-safety reveal">
+                <h4 data-i18n="rust.safety.title">安全设计</h4>
+                <div class="rust-safety-list">
+                    <div class="rust-safety-item">
+                        <div class="rust-safety-item-icon">&#8702;</div>
+                        <div class="rust-safety-item-body">
+                            <strong data-i18n="rust.safety.1.title">catch_unwind 边界保护</strong>
+                            <span data-i18n="rust.safety.1.desc">所有 JNI 入口用 catch_unwind(AssertUnwindSafe(...)) 包装，防止 Rust panic 跨 JNI 边界传播至 Java 侧</span>
+                        </div>
+                    </div>
+                    <div class="rust-safety-item">
+                        <div class="rust-safety-item-icon">&#8702;</div>
+                        <div class="rust-safety-item-body">
+                            <strong data-i18n="rust.safety.2.title">#[unsafe(no_mangle)]</strong>
+                            <span data-i18n="rust.safety.2.desc">符合 Rust edition 2024 规范的导出符号声明，显式标注 unsafe 意图</span>
+                        </div>
+                    </div>
+                    <div class="rust-safety-item">
+                        <div class="rust-safety-item-icon">&#8702;</div>
+                        <div class="rust-safety-item-body">
+                            <strong data-i18n="rust.safety.3.title">overflow-checks=true</strong>
+                            <span data-i18n="rust.safety.3.desc">Release 构建中开启算术溢出检查，防止整数溢出导致的未定义行为</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== Protocols ========== -->
+    <section id="protocols" class="section section-alt">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label" data-i18n="proto.label">协议兼容</span>
+                <h2 class="section-title" data-i18n="proto.title">客户端协议全适配</h2>
+                <p class="section-desc" data-i18n="proto.desc">10+ 客户端 mod 协议原生支持，连上即用</p>
+            </div>
+            <div class="protocols-grid">
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
+                        <div class="protocol-card-name">Carpet</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.carpet">50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 同步</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div>
+                        <div class="protocol-card-name">TISCM</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.tiscm">tiscm:network/v1，MSPT 广播、握手协议</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+                        <div class="protocol-card-name">XaeroMap</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.xaero">Xaero 地图通道支持</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg></div>
+                        <div class="protocol-card-name">Jade</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.jade">Jade 服务端数据提供</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></div>
+                        <div class="protocol-card-name">Syncmatica</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.sync">Litematic 同步</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
+                        <div class="protocol-card-name">Servux</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.servux">Servux 客户端服务</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6h6V2"/><path d="M5 8h14l-1 12H6L5 8z"/></svg></div>
+                        <div class="protocol-card-name">REI</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.rei">Roughly Enough Items 服务端协议</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+                        <div class="protocol-card-name">BBOR</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.bbor">Bounding Box Outline Reloaded</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg></div>
+                        <div class="protocol-card-name">AppleSkin</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.appleskin">饥饿/饱和度同步</div>
+                </div>
+                <div class="protocol-card reveal">
+                    <div class="protocol-card-header">
+                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 12h18"/><path d="M12 3v18"/></svg></div>
+                        <div class="protocol-card-name">Alt Block Placement</div>
+                    </div>
+                    <div class="protocol-card-desc" data-i18n="proto.altblock">Accurate/Carpet/Litematica 放置协议</div>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- ========== Config System ========== -->
-    <section id="config" class="section section-alt">
+    <section id="config" class="section">
         <div class="container">
             <div class="section-header reveal">
                 <span class="section-label" data-i18n="config.label">配置系统</span>
-                <h2 class="section-title" data-i18n="config.title">50+ 配置模块</h2>
-                <p class="section-desc" data-i18n="config.desc">六大类别的可配置选项，覆盖从性能到功能的全面控制</p>
+                <h2 class="section-title" data-i18n="config.title">六大类别配置</h2>
+                <p class="section-desc" data-i18n="config.desc">两套 TOML 配置文件，覆盖从性能到功能的全面控制</p>
             </div>
             <div class="config-grid">
                 <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-exp">Experiment</span><span class="config-count">7 modules</span></div>
-                    <h3 data-i18n="config.exp.title">实验性功能</h3>
-                    <ul>
-                        <li data-i18n="config.exp.1">CrossRegionHelper（跨区事件队列）</li>
-                        <li data-i18n="config.exp.2">GlobalEntitiesCounter（全局实体计数器）</li>
-                        <li>RayTrackingEntityTracker</li>
-                        <li>RedStoneConfig</li>
-                        <li>RegionBalancerConfig</li>
-                        <li>EntityDamageSourceTrace</li>
-                        <li>CommandConfig</li>
-                    </ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-fix">Fixes</span><span class="config-count">2 modules</span></div>
-                    <h3 data-i18n="config.fix.title">漏洞修复</h3>
-                    <ul><li>PortalLinkFix</li><li>UpdateSuppressionCrashFix</li></ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-func">Function</span><span class="config-count">13+8 modules</span></div>
+                    <div class="config-card-header"><span class="config-badge config-badge-func">Function</span><span class="config-count" data-i18n="config.func.count">function</span></div>
                     <h3 data-i18n="config.func.title">功能特性</h3>
                     <ul>
                         <li data-i18n="config.func.1">Fakeplayer（假玩家系统）</li>
                         <li data-i18n="config.func.2">WoolHopperCounter（羊毛漏斗计数器）</li>
                         <li data-i18n="config.func.3">ReplayAPI（ReplayMod 摄影师）</li>
-                        <li data-i18n="config.func.4">RedstoneStats（红石统计）</li>
-                        <li>PerformanceMonitor</li>
-                        <li>StructureProjection</li>
-                        <li data-i18n="config.func.5">+ 8 Protocol modules</li>
+                        <li data-i18n="config.func.4">LanguageConfig（语言配置）</li>
+                        <li data-i18n="config.func.5">ContainerExpansionConfig</li>
+                        <li data-i18n="config.func.6">RedstoneStats（红石统计）</li>
                     </ul>
                 </div>
                 <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-opt">Optimizations</span><span class="config-count">13 modules</span></div>
+                    <div class="config-card-header"><span class="config-badge config-badge-exp">Experiment</span><span class="config-count" data-i18n="config.exp.count">experiment</span></div>
+                    <h3 data-i18n="config.exp.title">实验性功能</h3>
+                    <ul>
+                        <li data-i18n="config.exp.1">RegionBalancerConfig（区域负载均衡）</li>
+                        <li data-i18n="config.exp.2">CrossRegionHelperConfig（跨区事件队列）</li>
+                        <li data-i18n="config.exp.3">GlobalEntitiesCounter（全局实体计数器）</li>
+                        <li data-i18n="config.exp.4">RayTrackingEntityTracker</li>
+                        <li data-i18n="config.exp.5">RedStoneConfig</li>
+                        <li data-i18n="config.exp.6">EntityDamageSourceTrace</li>
+                    </ul>
+                </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header"><span class="config-badge config-badge-opt">Optimizations</span><span class="config-count" data-i18n="config.opt.count">optimizations</span></div>
                     <h3 data-i18n="config.opt.title">性能优化</h3>
                     <ul>
                         <li data-i18n="config.opt.1">AsyncPathfinding（异步寻路）</li>
-                        <li>ChunkDeltaCompression</li>
-                        <li data-i18n="config.opt.2">DynamicViewDistance（动态视距）</li>
-                        <li>EntityDirtyTracking</li>
-                        <li>MmapRegionStorage</li>
-                        <li>RedstoneDirtyTracking</li>
-                        <li>VillagerOptimizer</li>
+                        <li data-i18n="config.opt.2">NetworkOptimizerConfig</li>
+                        <li data-i18n="config.opt.3">MmapRegionStorageConfig</li>
+                        <li data-i18n="config.opt.4">ChunkDeltaCompression</li>
+                        <li data-i18n="config.opt.5">DynamicViewDistance（动态视距）</li>
+                        <li data-i18n="config.opt.6">EntityDirtyTracking</li>
+                        <li data-i18n="config.opt.7">VillagerOptimizer</li>
                     </ul>
                 </div>
                 <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-misc">Misc</span><span class="config-count">4 modules</span></div>
-                    <h3 data-i18n="config.misc.title">杂项</h3>
-                    <ul><li>AutoUpdate</li><li>BStats</li><li>DisableCheck</li><li>ItemEntity</li></ul>
+                    <div class="config-card-header"><span class="config-badge config-badge-fix">Fixes</span><span class="config-count" data-i18n="config.fix.count">fixes</span></div>
+                    <h3 data-i18n="config.fix.title">崩溃修复</h3>
+                    <ul>
+                        <li data-i18n="config.fix.1">UpdateSuppressionCrashFixConfig</li>
+                        <li data-i18n="config.fix.2">PortalLinkFix</li>
+                    </ul>
                 </div>
                 <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-toml">TOML</span><span class="config-count">3 files</span></div>
-                    <h3 data-i18n="config.toml.title">配置文件</h3>
-                    <ul><li><code>mili_config.toml</code></li><li><code>mili_carpet_config.toml</code></li><li><code>luminol_config.toml</code></li></ul>
+                    <div class="config-card-header"><span class="config-badge config-badge-misc">Misc</span><span class="config-count" data-i18n="config.misc.count">misc</span></div>
+                    <h3 data-i18n="config.misc.title">杂项</h3>
+                    <ul>
+                        <li>AutoUpdateConfig</li>
+                        <li>BStatsConfig</li>
+                        <li>DisableCheckConfig</li>
+                        <li>ItemEntityConfig</li>
+                    </ul>
                 </div>
+                <div class="config-card reveal">
+                    <div class="config-card-header"><span class="config-badge config-badge-carpet">Carpet</span><span class="config-count" data-i18n="config.carpet.count">carpet</span></div>
+                    <h3 data-i18n="config.carpet.title">Carpet 规则映射</h3>
+                    <ul>
+                        <li data-i18n="config.carpet.1">CoreConfig（核心规则）</li>
+                        <li data-i18n="config.carpet.2">GeneralCompatConfig（通用兼容）</li>
+                        <li data-i18n="config.carpet.3">50+ Carpet/TIS/AMS 规则</li>
+                        <li data-i18n="config.carpet.4">TPS/mobcaps/counter HUD</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="arch-note reveal" style="margin-block-start: 40px;">
+                <span data-i18n="config.files">配置文件：<code>mili_config.toml</code>（主配置，fun.bm.mili.config.modules）和 <code>mili_carpet_config.toml</code>（Carpet 规则，fun.bm.mili.carpet.config.modules）。完整配置项速查表见 Wiki。</span>
             </div>
         </div>
     </section>
 
     <!-- ========== Quick Start ========== -->
-    <section id="quickstart" class="section">
+    <section id="quickstart" class="section section-alt">
         <div class="container">
             <div class="section-header reveal">
                 <span class="section-label" data-i18n="qs.label">快速上手</span>
@@ -1352,30 +1615,44 @@ cd Mili</div>
                     <div class="qs-step reveal">
                         <div class="qs-step-num">2</div>
                         <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s2.title">应用补丁</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Requires JDK 21+, Rust is optional</span>
-<span style="color:var(--syn-c)"># Windows: git config --global core.longpaths true</span>
-./gradlew applyAllPatches --no-configuration-cache --no-build-cache</div>
+                            <h4 data-i18n="qs.build.s2.title">启用长路径（Windows）</h4>
+                            <div class="code-block"><span style="color:var(--syn-c)"># Windows only: enable long paths</span>
+git config --global core.longpaths true</div>
                         </div>
                     </div>
                     <div class="qs-step reveal">
                         <div class="qs-step-num">3</div>
                         <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s3.title">注入 Kotlin 并构建</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Inject Kotlin support (optional)</span>
-python scripts/inject_kotlin.py
-<span style="color:var(--syn-c)"># Compile Rust native lib (optional, falls back to Java)</span>
-./gradlew :mili-rust:stageRustBinary
-<span style="color:var(--syn-c)"># Build Paperclip JAR</span>
-./gradlew :mili-server:createMojmapPaperclipJar</div>
+                            <h4 data-i18n="qs.build.s3.title">应用补丁</h4>
+                            <div class="code-block"><span style="color:var(--syn-c)"># Requires JDK 25+, Rust is optional</span>
+./gradlew applyAllPatches --no-configuration-cache --no-build-cache</div>
                         </div>
                     </div>
                     <div class="qs-step reveal">
                         <div class="qs-step-num">4</div>
                         <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s4.title">获取构建产物</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Output location</span>
-mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
+                            <h4 data-i18n="qs.build.s4.title">注入 Kotlin 支持</h4>
+                            <div class="code-block"><span style="color:var(--syn-c)"># Inject Kotlin support (optional)</span>
+python scripts/inject_kotlin.py</div>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">5</div>
+                        <div class="qs-step-body">
+                            <h4 data-i18n="qs.build.s5.title">编译 Rust 原生库</h4>
+                            <div class="code-block"><span style="color:var(--syn-c)"># Compile Rust native lib (optional, falls back to Java)</span>
+./gradlew :mili-rust:stageRustBinary
+<span style="color:var(--syn-c)"># Or build Rust independently:</span>
+<span style="color:var(--syn-c)"># cd mili-rust/src/rust && cargo build --release</span></div>
+                        </div>
+                    </div>
+                    <div class="qs-step reveal">
+                        <div class="qs-step-num">6</div>
+                        <div class="qs-step-body">
+                            <h4 data-i18n="qs.build.s6.title">构建 Paperclip JAR</h4>
+                            <div class="code-block"><span style="color:var(--syn-c)"># Build Paperclip JAR</span>
+./gradlew :mili-server:createMojmapPaperclipJar
+<span style="color:var(--syn-c)"># Output: mili-server/build/libs/mili-paperclip-26.2-R0.1-SNAPSHOT.jar</span></div>
                         </div>
                     </div>
                 </div>
@@ -1384,7 +1661,7 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
                         <div class="qs-step-num">1</div>
                         <div class="qs-step-body">
                             <h4 data-i18n="qs.dl.s1.title">从 GitHub Releases 下载</h4>
-                            <p data-i18n="qs.dl.s1.desc">访问 Releases 页面，下载最新的 -mojmap.jar 文件。</p>
+                            <p data-i18n="qs.dl.s1.desc">访问 Releases 页面，下载最新的 Paperclip JAR 文件。</p>
                         </div>
                     </div>
                     <div class="qs-step reveal">
@@ -1392,9 +1669,10 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
                         <div class="qs-step-body">
                             <h4 data-i18n="qs.dl.s2.title">环境要求</h4>
                             <ul class="qs-list">
-                                <li data-i18n="qs.dl.s2.1">JDK 21 或更高版本</li>
-                                <li>Minecraft 1.21.11</li>
+                                <li data-i18n="qs.dl.s2.1">JDK 25 或更高版本（不是 JDK 21）</li>
+                                <li>Minecraft 26.2</li>
                                 <li data-i18n="qs.dl.s2.3">推荐 4+ 核 CPU 以发挥 Folia 多线程优势</li>
+                                <li data-i18n="qs.dl.s2.4">Rust stable (edition 2024) — 可选，用于编译原生优化库</li>
                             </ul>
                         </div>
                     </div>
@@ -1402,9 +1680,57 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
                         <div class="qs-step-num">3</div>
                         <div class="qs-step-body">
                             <h4 data-i18n="qs.dl.s3.title">启动服务器</h4>
-                            <div class="code-block">java -jar mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar --nogui</div>
+                            <div class="code-block">java -jar mili-paperclip-26.2-R0.1-SNAPSHOT.jar --nogui</div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== API Usage ========== -->
+    <section id="api" class="section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-label" data-i18n="api.label">API</span>
+                <h2 class="section-title" data-i18n="api.title">依赖接入</h2>
+                <p class="section-desc" data-i18n="api.desc">通过 Maven 仓库引入 Mili API 进行插件开发</p>
+            </div>
+            <div class="qs-tabs reveal">
+                <button class="qs-tab active" data-tab="gradle" data-i18n="api.tab.gradle">Gradle (Kotlin DSL)</button>
+                <button class="qs-tab" data-tab="maven" data-i18n="api.tab.maven">Maven</button>
+            </div>
+            <div class="api-content">
+                <div class="api-panel active" data-panel="gradle">
+                    <div class="code-block"><span style="color:var(--syn-k)">repositories</span> {
+    maven {
+        url = uri(<span style="color:var(--syn-s)">"https://repo.menthamc.org/repository/maven-public/"</span>)
+    }
+}
+
+<span style="color:var(--syn-k)">dependencies</span> {
+    compileOnly(<span style="color:var(--syn-s)">"fun.bm.mili:mili-api:26.2-R0.1-SNAPSHOT"</span>)
+}</div>
+                </div>
+                <div class="api-panel" data-panel="maven">
+                    <div class="code-block"><span style="color:var(--syn-k)">&lt;repositories&gt;</span>
+  <span style="color:var(--syn-k)">&lt;repository&gt;</span>
+    <span style="color:var(--syn-t)">&lt;id&gt;</span>menthamc<span style="color:var(--syn-t)">&lt;/id&gt;</span>
+    <span style="color:var(--syn-t)">&lt;url&gt;</span>https://repo.menthamc.org/repository/maven-public/<span style="color:var(--syn-t)">&lt;/url&gt;</span>
+  <span style="color:var(--syn-k)">&lt;/repository&gt;</span>
+<span style="color:var(--syn-k)">&lt;/repositories&gt;</span>
+
+<span style="color:var(--syn-k)">&lt;dependencies&gt;</span>
+  <span style="color:var(--syn-k)">&lt;dependency&gt;</span>
+    <span style="color:var(--syn-t)">&lt;groupId&gt;</span>fun.bm.mili<span style="color:var(--syn-t)">&lt;/groupId&gt;</span>
+    <span style="color:var(--syn-t)">&lt;artifactId&gt;</span>mili-api<span style="color:var(--syn-t)">&lt;/artifactId&gt;</span>
+    <span style="color:var(--syn-t)">&lt;version&gt;</span>26.2-R0.1-SNAPSHOT<span style="color:var(--syn-t)">&lt;/version&gt;</span>
+    <span style="color:var(--syn-t)">&lt;scope&gt;</span>provided<span style="color:var(--syn-t)">&lt;/scope&gt;</span>
+  <span style="color:var(--syn-k)">&lt;/dependency&gt;</span>
+<span style="color:var(--syn-k)">&lt;/dependencies&gt;</span></div>
+                </div>
+                <div class="api-note reveal">
+                    <span data-i18n="api.note">API 模块路径：<code>fun.bm.mili</code>。包含 Bot、Photographer、事件 API 等。插件开发请使用 <code>compileOnly</code>（Gradle）或 <code>provided</code>（Maven）scope。</span>
                 </div>
             </div>
         </div>
@@ -1416,7 +1742,7 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             <div class="footer-grid">
                 <div class="footer-col">
                     <div class="footer-logo"><span class="logo-icon">&#127837;</span><span class="logo-text">Mili</span></div>
-                    <p class="footer-desc" data-i18n="footer.desc">为生电而生的 Folia 高性能服务端核心。Rust 原生加速，红石全兼容，Carpet 协议支持。</p>
+                    <p class="footer-desc" data-i18n="footer.desc">基于 Folia 的高性能 Minecraft 服务端核心。Rust 原生加速，红石全兼容，Carpet 协议支持，假玩家系统。</p>
                 </div>
                 <div class="footer-col">
                     <h4 data-i18n="footer.resources">资源</h4>
@@ -1425,20 +1751,28 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
                         <li><a href="https://github.com/xucy10/Mili/releases" target="_blank" rel="noopener">Releases</a></li>
                         <li><a href="https://github.com/xucy10/Mili/blob/master/docs/WIKI.md" target="_blank" rel="noopener" data-i18n="footer.wiki">Wiki 文档</a></li>
                         <li><a href="https://github.com/xucy10/Mili/blob/master/docs/CONTRIBUTING.md" target="_blank" rel="noopener" data-i18n="footer.contrib">贡献指南</a></li>
+                        <li><a href="https://discord.com/invite/BSa67dbvVf" target="_blank" rel="noopener" data-i18n="footer.discord">Discord 社区</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4 data-i18n="footer.upstream">继承链</h4>
                     <ul>
+                        <li><a href="https://github.com/PaperMC/Folia" target="_blank" rel="noopener">Folia（直接上游）</a></li>
                         <li><a href="https://github.com/PaperMC/Paper" target="_blank" rel="noopener">Paper</a></li>
-                        <li><a href="https://github.com/PaperMC/Folia" target="_blank" rel="noopener">Folia</a></li>
-                        <li><a href="https://github.com/LeavesMC/Leaves" target="_blank" rel="noopener">Leaves</a></li>
+                        <li><a href="https://github.com/LeavesMC/Leaves" target="_blank" rel="noopener">LeavesMC</a></li>
                         <li><a href="https://github.com/LophineLabs/Lophine" target="_blank" rel="noopener">Lophine</a></li>
+                        <li data-i18n="footer.luminol">Luminol（已删库）</li>
                     </ul>
                 </div>
                 <div class="footer-col">
                     <h4 data-i18n="footer.stack">技术栈</h4>
-                    <ul><li>Java 21 (LTS)</li><li>Rust (stable)</li><li>Gradle + Kotlin DSL</li><li>Hyacinthusweight</li></ul>
+                    <ul>
+                        <li>Java 25 (LTS)</li>
+                        <li>Rust (edition 2024)</li>
+                        <li>Gradle + Kotlin DSL</li>
+                        <li>Hyacinthusweight</li>
+                        <li>toml_edit / serde / rayon</li>
+                    </ul>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -1460,34 +1794,36 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             'nav.features': '特性',
             'nav.architecture': '架构',
             'nav.rust': 'Rust 引擎',
+            'nav.protocols': '协议',
             'nav.config': '配置',
             'nav.quickstart': '快速上手',
+            'nav.api': 'API',
 
-            'hero.badge': 'MC 1.21.11 · Folia-Powered · Rust-Accelerated',
-            'hero.subtitle': '为生电而生的 Folia 高性能服务端核心',
-            'hero.tagline': 'Rust 原生加速 · 红石全兼容 · Carpet 协议支持 · 假玩家系统',
+            'hero.badge': 'MC 26.2 · Folia-Powered · Rust edition 2024',
+            'hero.subtitle': '基于 Folia 的高性能 Minecraft 服务端核心，融合 Rust 原生加速与深度生电兼容',
+            'hero.tagline': 'Rust 原生加速 · 红石全兼容 · Carpet 协议支持 · 假玩家系统 · ReplayMod 摄影师',
             'hero.btn.start': '快速上手',
             'hero.btn.download': '下载',
             'hero.stats.license': 'License',
             'hero.stats.runtime': 'Runtime',
             'hero.stats.native': 'Native Engine',
-            'hero.stats.modules': 'Config Modules',
+            'hero.stats.modules': 'Feature Patches',
 
             'features.label': '核心特性',
             'features.title': '为什么选择 Mili?',
             'features.desc': '在 Folia 区域多线程调度模型上构建的增强运行时',
             'features.rust.title': 'Rust 原生加速',
-            'features.rust.desc': '通过 JNI 桥接 Rust 原生库，加速实体视锥剔除、光照计算等高频路径。零拷贝 DirectByteBuffer + Rayon 并行，每 tick 仅需 M 次 JNI 调用而非 N×M 次。缺失时自动回退纯 Java。',
+            'features.rust.desc': '通过 JNI 桥接 Rust 原生库（mili_optimizer.dll/.so/.dylib），加速实体视锥剔除、TOML 配置读写等高频路径。零拷贝 DirectByteBuffer + Rayon 并行，每 tick 仅需 M 次 JNI 调用而非 N×M 次。缺失时自动回退纯 Java。',
             'features.toml.title': 'TOML 配置系统',
             'features.toml.desc': '使用 Rust toml_edit 引擎替代 NightConfig，完整保留注释，支持热重载与递归删除。JSON 批量传输在 JNI 边界高效传递配置数据，读写性能显著提升。',
-            'features.balancer.title': 'Folia 区域负载均衡',
-            'features.balancer.desc': '共享线程池 + 优先级队列替代每区域独占线程。无锁滑动窗口统计 tick 耗时，根据实时负载动态分配 CPU 资源，低负载区域自动合并执行，告别"一个区域卡全服"。',
+            'features.balancer.title': 'Folia 稳定性修复',
+            'features.balancer.desc': 'Region Balancer 共享线程池 + 优先级队列替代每区域独占线程；无锁滑动窗口统计 tick 耗时；自适应 TPS 管理；跨区事件队列；全局 UUID 注册中心防碰撞；catch(Throwable) 加固防止 Error 导致调度器静默死亡。',
             'features.redstone.title': '红石与生电兼容',
-            'features.redstone.desc': '从 Leaves 移植的全套红石修复：更新抑制、红石忽略向上更新、即时方块更新器、旧方块移除行为、羊毛漏斗计数器。生电机器安心运行，原版行为一个不少。',
+            'features.redstone.desc': '从 Leaves/Lophine 移植并适配 Folia 的全套红石修复：更新抑制（捕获异常防崩溃）、红石忽略向上更新、即时方块更新器、旧方块移除行为、羊毛漏斗计数器。生电机器安心运行，原版行为一个不少。',
             'features.carpet.title': 'Carpet 与协议兼容',
-            'features.carpet.desc': '50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 实时同步。Jade、Syncmatica、XaeroMap、REI、BBOR、AppleSkin 等客户端 mod 协议全适配，连上即用。',
-            'features.storage.title': '多存档格式支持',
-            'features.storage.desc': '支持原版、Linear 和 b_linear 存档格式。MmapRegionStorage 提供内存映射加速的区域存储，ChunkDeltaCompression 减少网络带宽占用，多种优化可选。',
+            'features.carpet.desc': '50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 实时同步。TISCM、Jade、Syncmatica、Servux、XaeroMap、REI、BBOR、AppleSkin 等客户端 mod 协议全适配。',
+            'features.storage.title': '假玩家与摄影师',
+            'features.storage.desc': '从 Leaves 移植的假玩家系统：创建/管理/移除假玩家，常驻、背包操作、动作执行（攻击、破坏、钓鱼、跳跃、移动等），配套完整 Java 事件 API。ReplayMod 摄影师实体录像，Photographer / PhotographerManager API。',
 
             'arch.label': '架构',
             'arch.title': '继承链',
@@ -1496,38 +1832,83 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             'arch.node.paper': 'Server Framework',
             'arch.node.folia': 'Region Multithreading',
             'arch.node.mili': 'Rust + Stability',
-            'arch.module.api': '对外暴露的 API 与兼容适配层',
-            'arch.module.server': '服务端核心逻辑的补丁与增强实现',
-            'arch.module.native': 'Rust JNI 原生优化模块 (toml_edit, serde, jni, rayon)',
+            'arch.note': 'Mili 原为 Lophine/Luminol 的衍生分支，现已迁移为直接基于 Folia，将 Luminol 的优化源码内联合并。（Luminol 已在与 Canvas 争议中删库）',
+            'arch.module.api': '对外暴露的 API 与兼容适配层，包含 Bot、Photographer、事件 API',
+            'arch.module.server': '服务端核心逻辑的补丁与增强实现，121 个 feature 补丁',
+            'arch.module.native': 'Rust JNI 原生优化模块 (toml_edit, serde, jni, rayon, edition 2024)',
 
             'rust.label': 'Rust 引擎',
             'rust.title': '原生加速架构',
-            'rust.desc': 'Rust + JNI 批量处理，零拷贝传递，多核并行',
+            'rust.desc': 'Rust edition 2024 + JNI 批量处理，零拷贝传递，多核并行',
             'rust.cull.title': '实体视锥剔除',
             'rust.cull.desc': '6 平面 AABB frustum 测试，Java 侧将实体数据打包进 DirectByteBuffer，Rust 通过 GetDirectBufferAddress 直接读取内存地址。每 tick 仅需 M 次 JNI 调用（M = 观察者数量），而非 N×M 次。',
             'rust.toml.title': 'TOML 配置引擎',
-            'rust.toml.desc': 'Rust toml_edit 替代 NightConfig。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。',
+            'rust.toml.desc': 'Rust toml_edit 替代 NightConfig。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。支持热重载与递归删除。',
             'rust.cross.title': '跨平台原生库',
-            'rust.cross.desc': '自动检测操作系统并从 JAR 中释放对应的原生库：Windows .dll、Linux .so、macOS .dylib。缺失时自动回退纯 Java 实现。',
+            'rust.cross.desc': '自动检测操作系统并从 JAR 中释放对应的原生库：Windows .dll、Linux .so、macOS .dylib。缺失时自动回退纯 Java 实现。Rust 单独编译支持 cargo clippy（0 warning）与 cargo test（28 个单元测试）。',
+            'rust.safety.title': '安全设计',
+            'rust.safety.1.title': 'catch_unwind 边界保护',
+            'rust.safety.1.desc': '所有 JNI 入口用 catch_unwind(AssertUnwindSafe(...)) 包装，防止 Rust panic 跨 JNI 边界传播至 Java 侧',
+            'rust.safety.2.title': '#[unsafe(no_mangle)]',
+            'rust.safety.2.desc': '符合 Rust edition 2024 规范的导出符号声明，显式标注 unsafe 意图',
+            'rust.safety.3.title': 'overflow-checks=true',
+            'rust.safety.3.desc': 'Release 构建中开启算术溢出检查，防止整数溢出导致的未定义行为',
+
+            'proto.label': '协议兼容',
+            'proto.title': '客户端协议全适配',
+            'proto.desc': '10+ 客户端 mod 协议原生支持，连上即用',
+            'proto.carpet': '50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 同步',
+            'proto.tiscm': 'tiscm:network/v1，MSPT 广播、握手协议',
+            'proto.xaero': 'Xaero 地图通道支持',
+            'proto.jade': 'Jade 服务端数据提供',
+            'proto.sync': 'Litematic 同步',
+            'proto.servux': 'Servux 客户端服务',
+            'proto.rei': 'Roughly Enough Items 服务端协议',
+            'proto.bbor': 'Bounding Box Outline Reloaded',
+            'proto.appleskin': '饥饿/饱和度同步',
+            'proto.altblock': 'Accurate/Carpet/Litematica 放置协议',
 
             'config.label': '配置系统',
-            'config.title': '50+ 配置模块',
-            'config.desc': '六大类别的可配置选项，覆盖从性能到功能的全面控制',
-            'config.exp.title': '实验性功能',
-            'config.exp.1': 'CrossRegionHelper（跨区事件队列）',
-            'config.exp.2': 'GlobalEntitiesCounter（全局实体计数器）',
-            'config.fix.title': '漏洞修复',
+            'config.title': '六大类别配置',
+            'config.desc': '两套 TOML 配置文件，覆盖从性能到功能的全面控制',
+            'config.func.count': 'function',
             'config.func.title': '功能特性',
             'config.func.1': 'Fakeplayer（假玩家系统）',
             'config.func.2': 'WoolHopperCounter（羊毛漏斗计数器）',
             'config.func.3': 'ReplayAPI（ReplayMod 摄影师）',
-            'config.func.4': 'RedstoneStats（红石统计）',
-            'config.func.5': '+ 8 个协议模块',
+            'config.func.4': 'LanguageConfig（语言配置）',
+            'config.func.5': 'ContainerExpansionConfig',
+            'config.func.6': 'RedstoneStats（红石统计）',
+            'config.exp.count': 'experiment',
+            'config.exp.title': '实验性功能',
+            'config.exp.1': 'RegionBalancerConfig（区域负载均衡）',
+            'config.exp.2': 'CrossRegionHelperConfig（跨区事件队列）',
+            'config.exp.3': 'GlobalEntitiesCounter（全局实体计数器）',
+            'config.exp.4': 'RayTrackingEntityTracker',
+            'config.exp.5': 'RedStoneConfig',
+            'config.exp.6': 'EntityDamageSourceTrace',
+            'config.opt.count': 'optimizations',
             'config.opt.title': '性能优化',
             'config.opt.1': 'AsyncPathfinding（异步寻路）',
-            'config.opt.2': 'DynamicViewDistance（动态视距）',
+            'config.opt.2': 'NetworkOptimizerConfig',
+            'config.opt.3': 'MmapRegionStorageConfig',
+            'config.opt.4': 'ChunkDeltaCompression',
+            'config.opt.5': 'DynamicViewDistance（动态视距）',
+            'config.opt.6': 'EntityDirtyTracking',
+            'config.opt.7': 'VillagerOptimizer',
+            'config.fix.count': 'fixes',
+            'config.fix.title': '崩溃修复',
+            'config.fix.1': 'UpdateSuppressionCrashFixConfig',
+            'config.fix.2': 'PortalLinkFix',
+            'config.misc.count': 'misc',
             'config.misc.title': '杂项',
-            'config.toml.title': '配置文件',
+            'config.carpet.count': 'carpet',
+            'config.carpet.title': 'Carpet 规则映射',
+            'config.carpet.1': 'CoreConfig（核心规则）',
+            'config.carpet.2': 'GeneralCompatConfig（通用兼容）',
+            'config.carpet.3': '50+ Carpet/TIS/AMS 规则',
+            'config.carpet.4': 'TPS/mobcaps/counter HUD',
+            'config.files': '配置文件：<code>mili_config.toml</code>（主配置，fun.bm.mili.config.modules）和 <code>mili_carpet_config.toml</code>（Carpet 规则，fun.bm.mili.carpet.config.modules）。完整配置项速查表见 Wiki。',
 
             'qs.label': '快速上手',
             'qs.title': '开始使用',
@@ -1535,23 +1916,35 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             'qs.tab.build': '从源码构建',
             'qs.tab.download': '下载发行版',
             'qs.build.s1.title': '克隆仓库',
-            'qs.build.s2.title': '应用补丁',
-            'qs.build.s3.title': '注入 Kotlin 并构建',
-            'qs.build.s4.title': '获取构建产物',
+            'qs.build.s2.title': '启用长路径（Windows）',
+            'qs.build.s3.title': '应用补丁',
+            'qs.build.s4.title': '注入 Kotlin 支持',
+            'qs.build.s5.title': '编译 Rust 原生库',
+            'qs.build.s6.title': '构建 Paperclip JAR',
             'qs.dl.s1.title': '从 GitHub Releases 下载',
-            'qs.dl.s1.desc': '访问 Releases 页面，下载最新的 -mojmap.jar 文件。',
+            'qs.dl.s1.desc': '访问 Releases 页面，下载最新的 Paperclip JAR 文件。',
             'qs.dl.s2.title': '环境要求',
-            'qs.dl.s2.1': 'JDK 21 或更高版本',
+            'qs.dl.s2.1': 'JDK 25 或更高版本（不是 JDK 21）',
             'qs.dl.s2.3': '推荐 4+ 核 CPU 以发挥 Folia 多线程优势',
+            'qs.dl.s2.4': 'Rust stable (edition 2024) — 可选，用于编译原生优化库',
             'qs.dl.s3.title': '启动服务器',
 
-            'footer.desc': '为生电而生的 Folia 高性能服务端核心。Rust 原生加速，红石全兼容，Carpet 协议支持。',
+            'api.label': 'API',
+            'api.title': '依赖接入',
+            'api.desc': '通过 Maven 仓库引入 Mili API 进行插件开发',
+            'api.tab.gradle': 'Gradle (Kotlin DSL)',
+            'api.tab.maven': 'Maven',
+            'api.note': 'API 模块路径：<code>fun.bm.mili</code>。包含 Bot、Photographer、事件 API 等。插件开发请使用 <code>compileOnly</code>（Gradle）或 <code>provided</code>（Maven）scope。',
+
+            'footer.desc': '基于 Folia 的高性能 Minecraft 服务端核心。Rust 原生加速，红石全兼容，Carpet 协议支持，假玩家系统。',
             'footer.resources': '资源',
             'footer.repo': 'GitHub 仓库',
             'footer.wiki': 'Wiki 文档',
             'footer.contrib': '贡献指南',
+            'footer.discord': 'Discord 社区',
             'footer.upstream': '继承链',
             'footer.stack': '技术栈',
+            'footer.luminol': 'Luminol（已删库）',
             'footer.license': '基于 GPL-3.0 许可证 · 贡献者可选择 MIT',
             'footer.copy': '\u00A9 2025 Mili Project. 感谢 PaperMC、LeavesMC、Lophine 等上游项目及所有贡献者'
         },
@@ -1559,34 +1952,36 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             'nav.features': 'Features',
             'nav.architecture': 'Architecture',
             'nav.rust': 'Rust Engine',
+            'nav.protocols': 'Protocols',
             'nav.config': 'Config',
             'nav.quickstart': 'Quick Start',
+            'nav.api': 'API',
 
-            'hero.badge': 'MC 1.21.11 · Folia-Powered · Rust-Accelerated',
-            'hero.subtitle': 'A high-performance Minecraft server core built for technical survival, powered by Folia.',
-            'hero.tagline': 'Rust Native Acceleration · Full Redstone Compatibility · Carpet Protocol Support · Fake Player System',
+            'hero.badge': 'MC 26.2 · Folia-Powered · Rust edition 2024',
+            'hero.subtitle': 'A high-performance Minecraft server core based on Folia, combining Rust native acceleration with deep technical compatibility.',
+            'hero.tagline': 'Rust Native Acceleration · Full Redstone Compatibility · Carpet Protocol Support · Fake Player System · ReplayMod Photographer',
             'hero.btn.start': 'Quick Start',
             'hero.btn.download': 'Download',
             'hero.stats.license': 'License',
             'hero.stats.runtime': 'Runtime',
             'hero.stats.native': 'Native Engine',
-            'hero.stats.modules': 'Config Modules',
+            'hero.stats.modules': 'Feature Patches',
 
             'features.label': 'Core Features',
             'features.title': 'Why Mili?',
             'features.desc': 'An enhanced runtime built on Folia\u2019s region-based multithreading model',
             'features.rust.title': 'Rust Native Acceleration',
-            'features.rust.desc': 'Bridges Rust native libraries via JNI to accelerate hot paths like entity frustum culling and lighting. Zero-copy DirectByteBuffer + Rayon parallelism \u2014 only M JNI calls per tick instead of N\u00D7M. Falls back to pure Java when unavailable.',
+            'features.rust.desc': 'Bridges Rust native libraries via JNI (mili_optimizer.dll/.so/.dylib) to accelerate hot paths like entity frustum culling and TOML config I/O. Zero-copy DirectByteBuffer + Rayon parallelism \u2014 only M JNI calls per tick instead of N\u00D7M. Falls back to pure Java when unavailable.',
             'features.toml.title': 'TOML Config System',
             'features.toml.desc': 'Replaces NightConfig with Rust toml_edit engine, preserving comments, supporting hot-reload and recursive deletion. JSON batch transfer at the JNI boundary delivers significant read/write performance gains.',
-            'features.balancer.title': 'Folia Region Load Balancing',
-            'features.balancer.desc': 'Shared thread pool + priority queue replaces per-region exclusive threads. Lock-free sliding window tracks tick cost, dynamically allocating CPU by load. Low-load regions auto-merge \u2014 no more \u201Cone region lags the whole server.\u201D',
+            'features.balancer.title': 'Folia Stability Fixes',
+            'features.balancer.desc': 'Region Balancer: shared thread pool + priority queue replaces per-region exclusive threads; lock-free sliding window tracks tick cost; adaptive TPS management; cross-region event queue; global UUID registry prevents collision; catch(Throwable) hardening prevents silent scheduler thread death from Errors.',
             'features.redstone.title': 'Redstone & Technical Compatibility',
-            'features.redstone.desc': 'Full redstone fixes ported from Leaves: update suppression, redstone ignore upward updates, instant neighbor updater, legacy block onRemove behavior, wool hopper counter. Vanilla behavior preserved \u2014 technical machines run safely.',
+            'features.redstone.desc': 'Full redstone fixes ported from Leaves/Lophine and adapted for Folia: update suppression (catch exception to prevent crash), redstone ignore upward updates, instant neighbor updater, legacy block onRemove behavior, wool hopper counter. Vanilla behavior preserved \u2014 technical machines run safely.',
             'features.carpet.title': 'Carpet & Protocol Compatibility',
-            'features.carpet.desc': '50+ Carpet/TIS/AMS rule mappings with real-time TPS/mobcaps/counter HUD sync. Jade, Syncmatica, XaeroMap, REI, BBOR, AppleSkin and more client mod protocols fully adapted \u2014 plug and play.',
-            'features.storage.title': 'Multi-format Storage Support',
-            'features.storage.desc': 'Supports vanilla, Linear, and b_linear storage formats. MmapRegionStorage provides memory-mapped accelerated region storage, ChunkDeltaCompression reduces network bandwidth \u2014 multiple optimizations available.',
+            'features.carpet.desc': '50+ Carpet/TIS/AMS rule mappings with real-time TPS/mobcaps/counter HUD sync. TISCM, Jade, Syncmatica, Servux, XaeroMap, REI, BBOR, AppleSkin and more client mod protocols fully adapted.',
+            'features.storage.title': 'Fake Player & Photographer',
+            'features.storage.desc': 'Fake player system ported from Leaves: create/manage/remove fake players, persistent, inventory ops, action execution (attack, break, fish, jump, move, etc.) with full Java event API. ReplayMod photographer entity recording with Photographer / PhotographerManager API.',
 
             'arch.label': 'Architecture',
             'arch.title': 'Inheritance Chain',
@@ -1595,38 +1990,83 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             'arch.node.paper': 'Server Framework',
             'arch.node.folia': 'Region Multithreading',
             'arch.node.mili': 'Rust + Stability',
-            'arch.module.api': 'Public API and compatibility adapter layer',
-            'arch.module.server': 'Server core logic patches and enhancements',
-            'arch.module.native': 'Rust JNI native optimization module (toml_edit, serde, jni, rayon)',
+            'arch.note': 'Mili was originally a derivative of Lophine/Luminol, but has now migrated to be directly based on Folia, with Luminol\u2019s optimization source code merged inline. (Luminol was deleted in a dispute with Canvas.)',
+            'arch.module.api': 'Public API and compatibility adapter layer, including Bot, Photographer, and event APIs',
+            'arch.module.server': 'Server core logic patches and enhancements, 121 feature patches',
+            'arch.module.native': 'Rust JNI native optimization module (toml_edit, serde, jni, rayon, edition 2024)',
 
             'rust.label': 'Rust Engine',
             'rust.title': 'Native Acceleration Architecture',
-            'rust.desc': 'Rust + JNI batch processing, zero-copy transfer, multi-core parallelism',
+            'rust.desc': 'Rust edition 2024 + JNI batch processing, zero-copy transfer, multi-core parallelism',
             'rust.cull.title': 'Entity Frustum Culling',
             'rust.cull.desc': '6-plane AABB frustum test. Java packs entity data into DirectByteBuffer, Rust reads memory directly via GetDirectBufferAddress. Only M JNI calls per tick (M = observer count) instead of N\u00D7M.',
             'rust.toml.title': 'TOML Config Engine',
-            'rust.toml.desc': 'Rust toml_edit replaces NightConfig. On load, TOML is parsed to flattened JSON for Java; on save, JSON is received and written back as commented TOML.',
+            'rust.toml.desc': 'Rust toml_edit replaces NightConfig. On load, TOML is parsed to flattened JSON for Java; on save, JSON is received and written back as commented TOML. Supports hot-reload and recursive deletion.',
             'rust.cross.title': 'Cross-Platform Native Library',
-            'rust.cross.desc': 'Auto-detects OS and extracts the matching native library from JAR: Windows .dll, Linux .so, macOS .dylib. Falls back to pure Java when missing.',
+            'rust.cross.desc': 'Auto-detects OS and extracts the matching native library from JAR: Windows .dll, Linux .so, macOS .dylib. Falls back to pure Java when missing. Standalone Rust build supports cargo clippy (0 warnings) and cargo test (28 unit tests).',
+            'rust.safety.title': 'Safety Design',
+            'rust.safety.1.title': 'catch_unwind Boundary Protection',
+            'rust.safety.1.desc': 'All JNI entry points wrapped with catch_unwind(AssertUnwindSafe(...)) to prevent Rust panics from crossing the JNI boundary into Java',
+            'rust.safety.2.title': '#[unsafe(no_mangle)]',
+            'rust.safety.2.desc': 'Export symbol declarations compliant with Rust edition 2024, explicitly marking unsafe intent',
+            'rust.safety.3.title': 'overflow-checks=true',
+            'rust.safety.3.desc': 'Arithmetic overflow checks enabled in Release builds, preventing undefined behavior from integer overflow',
+
+            'proto.label': 'Protocol Compatibility',
+            'proto.title': 'Full Client Protocol Support',
+            'proto.desc': '10+ client mod protocols natively supported, plug and play',
+            'proto.carpet': '50+ Carpet/TIS/AMS rule mappings, TPS/mobcaps/counter HUD sync',
+            'proto.tiscm': 'tiscm:network/v1, MSPT broadcast, handshake',
+            'proto.xaero': 'Xaero map channel support',
+            'proto.jade': 'Jade server-side data provider',
+            'proto.sync': 'Litematic synchronization',
+            'proto.servux': 'Servux client service',
+            'proto.rei': 'Roughly Enough Items server protocol',
+            'proto.bbor': 'Bounding Box Outline Reloaded',
+            'proto.appleskin': 'Hunger/saturation sync',
+            'proto.altblock': 'Accurate/Carpet/Litematica placement protocol',
 
             'config.label': 'Config System',
-            'config.title': '50+ Config Modules',
-            'config.desc': 'Six categories of configurable options covering performance to functionality',
-            'config.exp.title': 'Experimental',
-            'config.exp.1': 'CrossRegionHelper (cross-region event queue)',
-            'config.exp.2': 'GlobalEntitiesCounter (global entity counter)',
-            'config.fix.title': 'Bug Fixes',
+            'config.title': 'Six Category Config',
+            'config.desc': 'Two TOML config files covering performance to functionality',
+            'config.func.count': 'function',
             'config.func.title': 'Functions',
             'config.func.1': 'Fakeplayer (fake player system)',
             'config.func.2': 'WoolHopperCounter (wool hopper counter)',
             'config.func.3': 'ReplayAPI (ReplayMod cameraman)',
-            'config.func.4': 'RedstoneStats (redstone statistics)',
-            'config.func.5': '+ 8 Protocol modules',
+            'config.func.4': 'LanguageConfig',
+            'config.func.5': 'ContainerExpansionConfig',
+            'config.func.6': 'RedstoneStats (redstone statistics)',
+            'config.exp.count': 'experiment',
+            'config.exp.title': 'Experimental',
+            'config.exp.1': 'RegionBalancerConfig (region load balancer)',
+            'config.exp.2': 'CrossRegionHelperConfig (cross-region event queue)',
+            'config.exp.3': 'GlobalEntitiesCounter (global entity counter)',
+            'config.exp.4': 'RayTrackingEntityTracker',
+            'config.exp.5': 'RedStoneConfig',
+            'config.exp.6': 'EntityDamageSourceTrace',
+            'config.opt.count': 'optimizations',
             'config.opt.title': 'Optimizations',
             'config.opt.1': 'AsyncPathfinding (async pathfinding)',
-            'config.opt.2': 'DynamicViewDistance (dynamic view distance)',
+            'config.opt.2': 'NetworkOptimizerConfig',
+            'config.opt.3': 'MmapRegionStorageConfig',
+            'config.opt.4': 'ChunkDeltaCompression',
+            'config.opt.5': 'DynamicViewDistance (dynamic view distance)',
+            'config.opt.6': 'EntityDirtyTracking',
+            'config.opt.7': 'VillagerOptimizer',
+            'config.fix.count': 'fixes',
+            'config.fix.title': 'Crash Fixes',
+            'config.fix.1': 'UpdateSuppressionCrashFixConfig',
+            'config.fix.2': 'PortalLinkFix',
+            'config.misc.count': 'misc',
             'config.misc.title': 'Misc',
-            'config.toml.title': 'Config Files',
+            'config.carpet.count': 'carpet',
+            'config.carpet.title': 'Carpet Rule Mapping',
+            'config.carpet.1': 'CoreConfig (core rules)',
+            'config.carpet.2': 'GeneralCompatConfig (general compat)',
+            'config.carpet.3': '50+ Carpet/TIS/AMS rules',
+            'config.carpet.4': 'TPS/mobcaps/counter HUD',
+            'config.files': 'Config files: <code>mili_config.toml</code> (main config, fun.bm.mili.config.modules) and <code>mili_carpet_config.toml</code> (Carpet rules, fun.bm.mili.carpet.config.modules). Full config reference in Wiki.',
 
             'qs.label': 'Quick Start',
             'qs.title': 'Get Started',
@@ -1634,23 +2074,35 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
             'qs.tab.build': 'Build from Source',
             'qs.tab.download': 'Download Release',
             'qs.build.s1.title': 'Clone Repository',
-            'qs.build.s2.title': 'Apply Patches',
-            'qs.build.s3.title': 'Inject Kotlin & Build',
-            'qs.build.s4.title': 'Get Build Artifacts',
+            'qs.build.s2.title': 'Enable Long Paths (Windows)',
+            'qs.build.s3.title': 'Apply Patches',
+            'qs.build.s4.title': 'Inject Kotlin Support',
+            'qs.build.s5.title': 'Compile Rust Native Library',
+            'qs.build.s6.title': 'Build Paperclip JAR',
             'qs.dl.s1.title': 'Download from GitHub Releases',
-            'qs.dl.s1.desc': 'Visit the Releases page and download the latest -mojmap.jar file.',
+            'qs.dl.s1.desc': 'Visit the Releases page and download the latest Paperclip JAR file.',
             'qs.dl.s2.title': 'Requirements',
-            'qs.dl.s2.1': 'JDK 21 or higher',
+            'qs.dl.s2.1': 'JDK 25 or higher (not JDK 21)',
             'qs.dl.s2.3': '4+ core CPU recommended for Folia multithreading',
+            'qs.dl.s2.4': 'Rust stable (edition 2024) \u2014 optional, for compiling native optimization library',
             'qs.dl.s3.title': 'Start Server',
 
-            'footer.desc': 'A high-performance Folia-based Minecraft server core for technical survival. Rust native acceleration, full redstone compatibility, Carpet protocol support.',
+            'api.label': 'API',
+            'api.title': 'Dependency Setup',
+            'api.desc': 'Import Mili API via Maven repository for plugin development',
+            'api.tab.gradle': 'Gradle (Kotlin DSL)',
+            'api.tab.maven': 'Maven',
+            'api.note': 'API module path: <code>fun.bm.mili</code>. Includes Bot, Photographer, and event APIs. Use <code>compileOnly</code> (Gradle) or <code>provided</code> (Maven) scope for plugin development.',
+
+            'footer.desc': 'A high-performance Folia-based Minecraft server core. Rust native acceleration, full redstone compatibility, Carpet protocol support, fake player system.',
             'footer.resources': 'Resources',
             'footer.repo': 'GitHub Repo',
             'footer.wiki': 'Wiki Docs',
             'footer.contrib': 'Contributing Guide',
+            'footer.discord': 'Discord Community',
             'footer.upstream': 'Upstream',
             'footer.stack': 'Tech Stack',
+            'footer.luminol': 'Luminol (deleted)',
             'footer.license': 'Licensed under GPL-3.0 · Contributors may opt for MIT',
             'footer.copy': '\u00A9 2025 Mili Project. Thanks to PaperMC, LeavesMC, Lophine and all contributors.'
         }
@@ -1672,7 +2124,7 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
         root.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
         localStorage.setItem(LANG_KEY, lang);
         var btn = document.getElementById('langToggle');
-        if (btn) btn.textContent = lang === 'zh' ? 'EN' : '中文';
+        if (btn) btn.textContent = lang === 'zh' ? 'EN' : '\u4E2D\u6587';
     }
 
     applyLang(currentLang);
@@ -1766,17 +2218,18 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
     }
 
     /* ============================================================
-       Quick Start Tabs
+       Tab Switching (Quick Start + API)
        ============================================================ */
-    var qsTabs = document.querySelectorAll('.qs-tab');
-    var qsPanels = document.querySelectorAll('.qs-panel');
-    qsTabs.forEach(function (tab) {
+    var allTabs = document.querySelectorAll('.qs-tab');
+    allTabs.forEach(function (tab) {
         tab.addEventListener('click', function () {
             var target = tab.getAttribute('data-tab');
-            qsTabs.forEach(function (t) { t.classList.remove('active'); });
-            qsPanels.forEach(function (p) { p.classList.remove('active'); });
+            var parent = tab.closest('.section');
+            if (!parent) return;
+            parent.querySelectorAll('.qs-tab').forEach(function (t) { t.classList.remove('active'); });
+            parent.querySelectorAll('.qs-panel, .api-panel').forEach(function (p) { p.classList.remove('active'); });
             tab.classList.add('active');
-            var panel = document.querySelector('.qs-panel[data-panel="' + target + '"]');
+            var panel = parent.querySelector('[data-panel="' + target + '"]');
             if (panel) {
                 panel.classList.add('active');
                 panel.querySelectorAll('.reveal').forEach(function (el, i) {
@@ -1832,8 +2285,6 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
 
     /* ============================================================
        Mobile Overflow Guard — JS Adaptive Clamping
-       Detects any element wider than viewport and forces it to fit.
-       Runs on load, resize, orientation change, and after tab switch.
        ============================================================ */
     function clampOverflow() {
         var vw = window.innerWidth;
@@ -1863,13 +2314,11 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
         };
     }
 
-    // Run after DOM ready + images/fonts settled
     if (document.readyState === 'complete') {
         clampOverflow();
     } else {
         window.addEventListener('load', clampOverflow);
     }
-    // Run again after a short delay for late layout shifts
     setTimeout(clampOverflow, 300);
     setTimeout(clampOverflow, 1000);
     window.addEventListener('resize', debounce(clampOverflow, 150));
@@ -1877,14 +2326,12 @@ mili-server/build/libs/mili-paperclip-1.21.11-R0.1-SNAPSHOT-mojmap.jar</div>
         setTimeout(clampOverflow, 300);
     });
 
-    // Re-run after Quick Start tab switch (new content becomes visible)
-    qsTabs.forEach(function (tab) {
+    allTabs.forEach(function (tab) {
         tab.addEventListener('click', function () {
             setTimeout(clampOverflow, 100);
         });
     });
 
-    // Re-run after language switch (text length changes)
     if (langToggle) {
         langToggle.addEventListener('click', function () {
             setTimeout(clampOverflow, 100);
