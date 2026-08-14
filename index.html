@@ -1,2344 +1,1307 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark" data-lang="zh">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Mili - 基于 Folia 的高性能 Minecraft 服务端核心，Rust 原生加速，深度生电兼容">
-    <meta name="author" content="Mili Project">
-    <meta property="og:title" content="Mili - High-Performance Minecraft Server">
-    <meta property="og:description" content="为生电而生的 Folia 高性能服务端核心">
-    <meta property="og:type" content="website">
-    <title>Mili - 为生电而生的 Folia 高性能服务端核心</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127837;</text></svg>">
-<style>
-/* ================================================================
-   Mili Website — Design System v4
-   同步 GitHub 仓库最新状态 · MC 26.2 · JDK 25+ · Rust edition 2024
-   ================================================================ */
-
-/* ---- Reset ---- */
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-img, svg { display: block; max-width: 100%; }
-button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
-ul, ol { list-style: none; }
-
-/* ---- Design Tokens ---- */
-:root {
-    /* Brand */
-    --c-orange: #FF8C42;
-    --c-orange-l: #FFB370;
-    --c-orange-d: #E07020;
-    --c-red: #FF5252;
-    --c-gold: #FFC83D;
-    --c-green: #4ADE80;
-    --c-blue: #60A5FA;
-    --c-purple: #C084FC;
-    --c-cyan: #22D3EE;
-
-    /* Dark theme */
-    --bg-0: #0B0B14;
-    --bg-1: #0F0F1A;
-    --bg-2: #14142A;
-    --bg-3: #1B1B30;
-    --bg-card: #16162B;
-    --bg-card-h: #1E1E38;
-    --bg-elev: #222240;
-    --bg-glass: rgba(16, 16, 30, 0.75);
-    --bg-glass-s: rgba(11, 11, 20, 0.90);
-
-    --t-1: #F2F2FA;
-    --t-2: #A8A8C4;
-    --t-3: #6E6E8A;
-    --t-4: #4A4A60;
-
-    --bd: rgba(255, 255, 255, 0.07);
-    --bd-s: rgba(255, 255, 255, 0.14);
-    --bd-glow: rgba(255, 140, 66, 0.30);
-
-    --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.35);
-    --sh-md: 0 4px 20px rgba(0, 0, 0, 0.40);
-    --sh-lg: 0 12px 40px rgba(0, 0, 0, 0.50);
-    --sh-glow: 0 0 28px rgba(255, 140, 66, 0.18);
-
-    /* Syntax */
-    --syn-k: #C792EA;
-    --syn-t: #82AAFF;
-    --syn-s: #C3E88D;
-    --syn-c: #546E7A;
-    --syn-n: #F78C6C;
-
-    /* Layout */
-    --cw: 1200px;
-    --nav-h: 64px;
-    --r-sm: 8px;
-    --r-md: 12px;
-    --r-lg: 16px;
-    --r-xl: 24px;
-
-    /* Motion */
-    --ease: cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-    --dur: 0.4s;
-}
-
-[data-theme="light"] {
-    --bg-0: #F5F5FA;
-    --bg-1: #FAFAFC;
-    --bg-2: #F0F0F6;
-    --bg-3: #E6E6F0;
-    --bg-card: #FFFFFF;
-    --bg-card-h: #F8F8FC;
-    --bg-elev: #FFFFFF;
-    --bg-glass: rgba(255, 255, 255, 0.82);
-    --bg-glass-s: rgba(255, 255, 255, 0.94);
-
-    --t-1: #1A1A2E;
-    --t-2: #4A4A60;
-    --t-3: #7A7A90;
-    --t-4: #B0B0C0;
-
-    --bd: rgba(0, 0, 0, 0.07);
-    --bd-s: rgba(0, 0, 0, 0.14);
-    --bd-glow: rgba(255, 140, 66, 0.20);
-
-    --sh-sm: 0 2px 8px rgba(0, 0, 0, 0.05);
-    --sh-md: 0 4px 20px rgba(0, 0, 0, 0.07);
-    --sh-lg: 0 12px 40px rgba(0, 0, 0, 0.10);
-    --sh-glow: 0 0 28px rgba(255, 140, 66, 0.10);
-}
-
-/* ---- Base ---- */
-html {
-    font-size: 16px;
-    scroll-behavior: smooth;
-    scroll-padding-top: var(--nav-h);
-    overflow-x: hidden;
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-    text-size-adjust: 100%;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans SC', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    background: var(--bg-1);
-    color: var(--t-1);
-    line-height: 1.75;
-    overflow-x: hidden;
-    max-width: 100vw;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
-}
-
-/* Global text overflow protection */
-p, h1, h2, h3, h4, h5, h6, li, span, a {
-    overflow-wrap: break-word;
-    word-break: break-word;
-}
-
-a { color: var(--c-orange); text-decoration: none; transition: color 0.2s; }
-a:hover { color: var(--c-orange-l); }
-
-code {
-    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'SF Mono', Consolas, monospace;
-    font-size: 0.85em;
-    background: var(--bg-3);
-    padding: 0.15em 0.4em;
-    border-radius: 4px;
-    color: var(--c-orange-l);
-}
-
-.container { max-width: var(--cw); margin-inline: auto; padding-inline: 24px; }
-
-::selection { background: var(--c-orange); color: #fff; }
-::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: var(--bg-2); }
-::-webkit-scrollbar-thumb { background: var(--bg-elev); border-radius: 5px; }
-::-webkit-scrollbar-thumb:hover { background: var(--c-orange-d); }
-
-/* ================================================================
-   Navigation
-   ================================================================ */
-.navbar {
-    position: fixed;
-    inset: 0 0 auto 0;
-    height: var(--nav-h);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    transition: background 0.3s var(--ease), box-shadow 0.3s, border-color 0.3s;
-    border-block-end: 1px solid transparent;
-}
-.navbar.scrolled {
-    background: var(--bg-glass);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    box-shadow: var(--sh-sm);
-    border-block-end-color: var(--bd);
-}
-
-.nav-inner {
-    width: 100%;
-    max-width: var(--cw);
-    margin-inline: auto;
-    padding-inline: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.nav-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--t-1);
-    letter-spacing: -0.02em;
-    margin-inline-end: auto;
-}
-.nav-logo:hover { color: var(--t-1); }
-.logo-icon { font-size: 1.4rem; line-height: 1; }
-.logo-text {
-    background: linear-gradient(135deg, var(--c-orange), var(--c-gold));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-.nav-links {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-}
-.nav-link {
-    color: var(--t-2);
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 8px 14px;
-    border-radius: var(--r-sm);
-    transition: all 0.2s var(--ease);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.nav-link:hover, .nav-link.active { color: var(--t-1); background: var(--bg-3); }
-
-.nav-github {
-    background: var(--bg-3);
-    border: 1px solid var(--bd);
-    margin-inline-start: 8px;
-}
-.nav-github:hover { border-color: var(--c-orange); background: var(--bg-card-h); }
-
-/* Buttons in nav */
-.nav-btn {
-    width: 36px; height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-3);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-sm);
-    color: var(--t-2);
-    transition: all 0.2s var(--ease);
-}
-.nav-btn:hover { color: var(--c-gold); border-color: var(--bd-s); }
-
-/* Theme toggle icon swap */
-.icon-sun { display: none; }
-.icon-moon { display: block; }
-[data-theme="light"] .icon-sun { display: block; }
-[data-theme="light"] .icon-moon { display: none; }
-
-/* Language toggle */
-.lang-toggle {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    color: var(--t-2);
-    min-width: 36px;
-}
-.lang-toggle:hover { color: var(--c-orange); }
-
-/* Hamburger */
-.nav-menu-btn {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    justify-content: center;
-    align-items: center;
-    width: 36px; height: 36px;
-    background: var(--bg-3);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-sm);
-    transition: all 0.2s;
-}
-.nav-menu-btn span {
-    display: block;
-    width: 18px; height: 2px;
-    background: var(--t-2);
-    border-radius: 2px;
-    transition: all 0.3s var(--ease);
-}
-.nav-menu-btn.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-.nav-menu-btn.open span:nth-child(2) { opacity: 0; }
-.nav-menu-btn.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-
-/* ================================================================
-   Hero
-   ================================================================ */
-.hero {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    padding: 120px 24px 80px;
-}
-
-.hero-bg-grid {
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(var(--bd) 1px, transparent 1px),
-        linear-gradient(90deg, var(--bd) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 0%, transparent 70%);
-    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 0%, transparent 70%);
-    opacity: 0.5;
-}
-
-.hero-bg-glow {
-    position: absolute;
-    inset-block-start: 10%;
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
-    width: 700px; height: 700px;
-    max-width: 120vw;
-    background: radial-gradient(circle, rgba(255, 140, 66, 0.12) 0%, transparent 60%);
-    filter: blur(40px);
-    pointer-events: none;
-    animation: pulseGlow 6s ease-in-out infinite;
-}
-@keyframes pulseGlow {
-    0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
-    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
-}
-
-.hero-content {
-    position: relative;
-    z-index: 1;
-    text-align: center;
-    max-width: 800px;
-}
-
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 16px;
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--bd-s);
-    border-radius: 100px;
-    font-size: 0.825rem;
-    font-weight: 500;
-    color: var(--t-2);
-    margin-block-end: 28px;
-}
-.pulse-dot {
-    width: 8px; height: 8px;
-    background: var(--c-green);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--c-green);
-    animation: pulseDot 2s ease-in-out infinite;
-}
-@keyframes pulseDot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-}
-
-.hero-title {
-    font-size: clamp(3rem, 10vw, 5.5rem);
-    font-weight: 900;
-    line-height: 1;
-    letter-spacing: -0.04em;
-    margin-block-end: 24px;
-}
-.gradient-text {
-    background: linear-gradient(135deg, var(--c-orange) 0%, var(--c-gold) 50%, var(--c-orange-l) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 30px rgba(255, 140, 66, 0.2));
-}
-
-.hero-subtitle {
-    font-size: 1.2rem;
-    color: var(--t-2);
-    margin-block-end: 36px;
-    line-height: 1.7;
-}
-.hero-tagline {
-    display: block;
-    font-size: 0.95rem;
-    color: var(--t-3);
-    margin-block-start: 6px;
-}
-
-.hero-actions {
-    display: flex;
-    gap: 16px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-block-end: 56px;
-}
-
-.btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 14px 28px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    border-radius: var(--r-md);
-    transition: all var(--dur) var(--ease);
-    border: none;
-}
-.btn-primary {
-    background: linear-gradient(135deg, var(--c-orange), var(--c-orange-d));
-    color: #fff;
-    box-shadow: 0 4px 16px rgba(255, 140, 66, 0.3);
-}
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(255, 140, 66, 0.4);
-    color: #fff;
-}
-.btn-secondary {
-    background: var(--bg-card);
-    color: var(--t-1);
-    border: 1px solid var(--bd-s);
-}
-.btn-secondary:hover {
-    background: var(--bg-card-h);
-    border-color: var(--c-orange);
-    transform: translateY(-2px);
-    color: var(--t-1);
-}
-
-.hero-stats {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-    max-width: 640px;
-    margin-inline: auto;
-}
-.stat { text-align: center; }
-.stat-value {
-    display: block;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--t-1);
-    letter-spacing: -0.02em;
-}
-.stat-label {
-    font-size: 0.75rem;
-    color: var(--t-3);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-block-start: 4px;
-}
-
-.scroll-indicator {
-    position: absolute;
-    inset-block-end: 32px;
-    inset-inline-start: 50%;
-    transform: translateX(-50%);
-    width: 26px; height: 42px;
-    border: 2px solid var(--bd-s);
-    border-radius: 14px;
-    display: flex;
-    justify-content: center;
-    padding-block-start: 6px;
-}
-.scroll-indicator span {
-    width: 4px; height: 8px;
-    background: var(--t-3);
-    border-radius: 2px;
-    animation: scrollHint 2s ease-in-out infinite;
-}
-@keyframes scrollHint {
-    0%, 100% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(8px); opacity: 0.3; }
-}
-
-/* ================================================================
-   Sections
-   ================================================================ */
-.section {
-    padding-block: 96px;
-    position: relative;
-}
-.section-alt { background: var(--bg-2); }
-
-.section-header {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 56px;
-    padding-inline: 4px;
-}
-.section-label {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    color: var(--c-orange);
-    margin-block-end: 12px;
-}
-.section-title {
-    font-size: clamp(2rem, 5vw, 2.75rem);
-    font-weight: 800;
-    letter-spacing: -0.03em;
-    margin-block-end: 16px;
-    color: var(--t-1);
-}
-.section-desc {
-    font-size: 1.05rem;
-    color: var(--t-2);
-}
-
-/* ================================================================
-   Features
-   ================================================================ */
-.features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
-    gap: 20px;
-}
-
-.feature-card {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 32px;
-    transition: all var(--dur) var(--ease);
-    position: relative;
-    overflow: hidden;
-    min-width: 0;
-}
-.feature-card::before {
-    content: '';
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--c-orange), var(--c-gold));
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.4s var(--ease);
-}
-.feature-card:hover {
-    background: var(--bg-card-h);
-    border-color: var(--bd-s);
-    transform: translateY(-4px);
-    box-shadow: var(--sh-lg);
-}
-.feature-card:hover::before { transform: scaleX(1); }
-
-.feature-icon {
-    width: 52px; height: 52px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, rgba(255, 140, 66, 0.12), rgba(255, 200, 61, 0.08));
-    border: 1px solid rgba(255, 140, 66, 0.15);
-    border-radius: 14px;
-    color: var(--c-orange);
-    margin-block-end: 20px;
-}
-
-.feature-card h3 {
-    font-size: 1.15rem;
-    font-weight: 700;
-    margin-block-end: 10px;
-    color: var(--t-1);
-}
-.feature-card p {
-    font-size: 0.9rem;
-    color: var(--t-2);
-    line-height: 1.75;
-}
-
-/* ================================================================
-   Architecture
-   ================================================================ */
-.arch-chain {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-block-end: 24px;
-}
-.arch-node {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 24px 20px;
-    min-width: 130px;
-    flex: 1 1 130px;
-    text-align: center;
-    transition: all var(--dur) var(--ease);
-}
-.arch-node:hover {
-    border-color: var(--bd-s);
-    transform: translateY(-4px);
-}
-.arch-node-highlight {
-    border-color: var(--c-orange);
-    box-shadow: var(--sh-glow);
-    background: linear-gradient(135deg, var(--bg-card), rgba(255, 140, 66, 0.04));
-}
-.arch-node-icon { font-size: 2rem; margin-block-end: 8px; }
-.arch-node-name { font-weight: 700; font-size: 1rem; color: var(--t-1); margin-block-end: 2px; }
-.arch-node-desc { font-size: 0.75rem; color: var(--t-3); }
-
-.arch-arrow { font-size: 1.5rem; color: var(--t-4); font-weight: 300; }
-
-.arch-note {
-    text-align: center;
-    max-width: 720px;
-    margin: 0 auto 56px;
-    padding: 16px 24px;
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-md);
-    font-size: 0.88rem;
-    color: var(--t-3);
-    line-height: 1.7;
-}
-
-.arch-modules {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-.arch-module {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 24px;
-    min-width: 0;
-    overflow: hidden;
-}
-.arch-module-highlight {
-    border-color: var(--c-orange);
-    box-shadow: var(--sh-glow);
-}
-.arch-module-tag {
-    display: inline-block;
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    padding: 4px 10px;
-    border-radius: 6px;
-    margin-block-end: 16px;
-    background: var(--bg-3);
-    color: var(--t-2);
-}
-.arch-module-highlight .arch-module-tag {
-    background: rgba(255, 140, 66, 0.12);
-    color: var(--c-orange);
-}
-.arch-module-body {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-block-end: 12px;
-}
-.arch-module-body code { font-size: 0.8rem; }
-.arch-module p { font-size: 0.85rem; color: var(--t-3); }
-
-/* ================================================================
-   Rust Engine
-   ================================================================ */
-.rust-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: start;
-    min-width: 0;
-}
-
-.rust-diagram {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 32px;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    overflow: hidden;
-}
-.rust-layer {
-    border-radius: var(--r-md);
-    padding: 20px;
-}
-.rust-layer-java { background: rgba(96, 165, 250, 0.08); border: 1px solid rgba(96, 165, 250, 0.15); }
-.rust-layer-native { background: rgba(255, 140, 66, 0.08); border: 1px solid rgba(255, 140, 66, 0.15); }
-
-.rust-layer-title {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    margin-block-end: 12px;
-    color: var(--t-2);
-}
-.rust-layer-items { display: flex; flex-wrap: wrap; gap: 8px; }
-.rust-layer-items span {
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 0.78rem;
-    background: var(--bg-glass);
-    padding: 4px 10px;
-    border-radius: 6px;
-    color: var(--t-1);
-}
-
-.rust-bridge {
-    text-align: center;
-    padding-block: 16px;
-    position: relative;
-}
-.rust-bridge::before, .rust-bridge::after {
-    content: '';
-    position: absolute;
-    inset-inline-start: 50%;
-    width: 2px; height: 12px;
-    background: var(--bd-s);
-    transform: translateX(-50%);
-}
-.rust-bridge::before { inset-block-start: 0; }
-.rust-bridge::after { inset-block-end: 0; }
-
-.rust-bridge-label {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    color: var(--c-gold);
-    margin-block-end: 8px;
-}
-.rust-bridge-protocol { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-.rust-bridge-protocol div {
-    font-size: 0.72rem;
-    padding: 3px 10px;
-    border-radius: 100px;
-    background: rgba(255, 200, 61, 0.08);
-    border: 1px solid rgba(255, 200, 61, 0.15);
-    color: var(--c-gold);
-}
-
-.rust-features { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
-.rust-feature {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 24px;
-    min-width: 0;
-    overflow: hidden;
-}
-.rust-feature h4 {
-    font-size: 1.05rem;
-    font-weight: 700;
-    margin-block-end: 8px;
-    color: var(--t-1);
-}
-.rust-feature p {
-    font-size: 0.88rem;
-    color: var(--t-2);
-    margin-block-end: 12px;
-}
-
-.rust-safety {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 28px;
-    margin-block-start: 40px;
-}
-.rust-safety h4 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-block-end: 16px;
-    color: var(--t-1);
-}
-.rust-safety-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
-    gap: 16px;
-}
-.rust-safety-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-}
-.rust-safety-item-icon {
-    flex-shrink: 0;
-    width: 28px; height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(74, 222, 128, 0.1);
-    border: 1px solid rgba(74, 222, 128, 0.2);
-    border-radius: 6px;
-    color: var(--c-green);
-    font-size: 0.85rem;
-    font-weight: 700;
-}
-.rust-safety-item-body { min-width: 0; }
-.rust-safety-item-body strong {
-    display: block;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--t-1);
-    margin-block-end: 4px;
-}
-.rust-safety-item-body span {
-    font-size: 0.8rem;
-    color: var(--t-3);
-    line-height: 1.6;
-}
-
-.code-block, .rust-code-block {
-    background: var(--bg-0);
-    border: 1px solid var(--bd);
-    border-radius: 10px;
-    padding: 16px;
-    font-family: 'JetBrains Mono', 'Fira Code', monospace;
-    font-size: 0.8rem;
-    line-height: 1.7;
-    overflow-x: auto;
-    overflow-y: hidden;
-    color: var(--t-1);
-    white-space: pre;
-    -webkit-overflow-scrolling: touch;
-    max-width: 100%;
-    display: block;
-    contain: content;
-}
-
-/* ================================================================
-   Protocols
-   ================================================================ */
-.protocols-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
-    gap: 16px;
-}
-.protocol-card {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-md);
-    padding: 20px;
-    transition: all 0.2s var(--ease);
-    min-width: 0;
-}
-.protocol-card:hover {
-    border-color: var(--bd-s);
-    transform: translateY(-2px);
-    background: var(--bg-card-h);
-}
-.protocol-card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-block-end: 8px;
-}
-.protocol-card-icon {
-    width: 32px; height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg-3);
-    border-radius: var(--r-sm);
-    color: var(--c-orange);
-    flex-shrink: 0;
-}
-.protocol-card-name {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: var(--t-1);
-}
-.protocol-card-desc {
-    font-size: 0.82rem;
-    color: var(--t-3);
-    line-height: 1.6;
-}
-
-/* ================================================================
-   Config System
-   ================================================================ */
-.config-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
-    gap: 20px;
-}
-.config-card {
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-lg);
-    padding: 28px;
-    transition: all var(--dur) var(--ease);
-    min-width: 0;
-    overflow: hidden;
-}
-.config-card:hover { border-color: var(--bd-s); transform: translateY(-2px); }
-.config-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-block-end: 16px;
-}
-.config-badge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    padding: 4px 10px;
-    border-radius: 6px;
-}
-.config-badge-exp   { background: rgba(192, 132, 252, 0.12); color: var(--c-purple); }
-.config-badge-fix   { background: rgba(255, 82, 82, 0.12);   color: var(--c-red); }
-.config-badge-func  { background: rgba(74, 222, 128, 0.12);  color: var(--c-green); }
-.config-badge-opt   { background: rgba(34, 211, 238, 0.12);  color: var(--c-cyan); }
-.config-badge-misc  { background: rgba(160, 160, 188, 0.12); color: var(--t-2); }
-.config-badge-carpet{ background: rgba(255, 200, 61, 0.12);  color: var(--c-gold); }
-
-.config-count { font-size: 0.75rem; color: var(--t-3); font-weight: 600; }
-.config-card h3 { font-size: 1.1rem; font-weight: 700; margin-block-end: 16px; color: var(--t-1); }
-.config-card ul { display: flex; flex-direction: column; gap: 8px; }
-.config-card li {
-    font-size: 0.85rem;
-    color: var(--t-2);
-    padding-inline-start: 20px;
-    position: relative;
-}
-.config-card li::before {
-    content: '';
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 10px;
-    width: 6px; height: 6px;
-    border-radius: 2px;
-    background: var(--c-orange);
-    opacity: 0.6;
-}
-
-/* ================================================================
-   Quick Start & API Tabs
-   ================================================================ */
-.qs-tabs {
-    display: flex;
-    gap: 4px;
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-md);
-    padding: 4px;
-    margin: 0 auto 32px;
-    width: fit-content;
-    max-width: 100%;
-    flex-wrap: wrap;
-}
-.qs-tab {
-    padding: 10px 24px;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--t-2);
-    border-radius: var(--r-sm);
-    transition: all 0.2s var(--ease);
-}
-.qs-tab:hover { color: var(--t-1); }
-.qs-tab.active { background: var(--bg-elev); color: var(--c-orange); }
-
-.qs-panel { display: none; }
-.qs-panel.active { display: block; }
-
-.qs-step {
-    display: flex;
-    gap: 20px;
-    margin-block-end: 24px;
-    align-items: flex-start;
-}
-.qs-step-num {
-    flex-shrink: 0;
-    width: 40px; height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, var(--c-orange), var(--c-orange-d));
-    color: #fff;
-    font-weight: 800;
-    font-size: 1.1rem;
-    border-radius: var(--r-md);
-    box-shadow: 0 4px 12px rgba(255, 140, 66, 0.2);
-}
-.qs-step-body { flex: 1; min-width: 0; }
-.qs-step-body h4 { font-size: 1.05rem; font-weight: 700; margin-block-end: 8px; color: var(--t-1); }
-.qs-step-body p { font-size: 0.9rem; color: var(--t-2); }
-.qs-list { padding: 0; }
-.qs-list li {
-    font-size: 0.9rem;
-    color: var(--t-2);
-    padding-inline-start: 20px;
-    position: relative;
-    margin-block-end: 6px;
-}
-.qs-list li::before {
-    content: '\2713';
-    position: absolute;
-    inset-inline-start: 0;
-    color: var(--c-green);
-    font-weight: 700;
-}
-.inline-link { color: var(--c-orange); text-decoration: underline; text-underline-offset: 2px; }
-
-/* API section code blocks */
-.api-content { max-width: 840px; margin: 0 auto; }
-.api-panel { display: none; }
-.api-panel.active { display: block; }
-.api-panel h4 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    margin-block-end: 16px;
-    color: var(--t-1);
-}
-.api-panel .code-block { font-size: 0.82rem; }
-.api-note {
-    margin-block-start: 20px;
-    padding: 16px 20px;
-    background: var(--bg-card);
-    border: 1px solid var(--bd);
-    border-radius: var(--r-md);
-    font-size: 0.85rem;
-    color: var(--t-3);
-}
-
-/* ================================================================
-   Footer
-   ================================================================ */
-.footer {
-    background: var(--bg-2);
-    border-block-start: 1px solid var(--bd);
-    padding-block: 56px 32px;
-}
-.footer-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-    margin-block-end: 40px;
-}
-.footer-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 1.25rem;
-    font-weight: 800;
-    margin-block-end: 16px;
-    color: var(--t-1);
-}
-.footer-desc { font-size: 0.85rem; color: var(--t-3); line-height: 1.8; }
-.footer-col h4 {
-    font-size: 0.8rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--t-1);
-    margin-block-end: 16px;
-}
-.footer-col ul { display: flex; flex-direction: column; gap: 10px; }
-.footer-col a { font-size: 0.85rem; color: var(--t-2); transition: color 0.2s; }
-.footer-col a:hover { color: var(--c-orange); }
-.footer-col li { font-size: 0.85rem; color: var(--t-2); }
-.footer-bottom {
-    padding-block-start: 32px;
-    border-block-start: 1px solid var(--bd);
-    text-align: center;
-}
-.footer-bottom p { font-size: 0.8rem; color: var(--t-3); margin-block-end: 4px; }
-.footer-copy { font-size: 0.75rem !important; }
-
-/* ================================================================
-   Reveal Animation
-   ================================================================ */
-.reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* ================================================================
-   Responsive
-   ================================================================ */
-@media (max-width: 1024px) {
-    .arch-modules { grid-template-columns: 1fr; }
-    .rust-content { grid-template-columns: 1fr; }
-    .footer-grid { grid-template-columns: 1fr 1fr; }
-}
-
-@media (max-width: 768px) {
-    .nav-links {
-        position: fixed;
-        inset-block-start: var(--nav-h);
-        inset-inline: 0;
-        background: var(--bg-glass-s);
-        backdrop-filter: blur(20px);
-        flex-direction: column;
-        padding: 16px 24px;
-        gap: 4px;
-        border-block-end: 1px solid var(--bd);
-        transform: translateY(-100%);
-        opacity: 0;
-        pointer-events: none;
-        transition: all 0.3s var(--ease);
-    }
-    .nav-links.open { transform: translateY(0); opacity: 1; pointer-events: auto; }
-    .nav-link { width: 100%; padding: 12px 16px; }
-    .nav-github { margin-inline-start: 0; }
-
-    .nav-menu-btn { display: flex; }
-
-    .section { padding-block: 72px; }
-    .section-header { margin-block-end: 48px; }
-
-    .hero-stats { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
-    .qs-step { gap: 16px; }
-
-    /* Architecture chain: allow wrapping with smaller nodes */
-    .arch-chain { gap: 6px; }
-    .arch-node { min-width: 100px; padding: 16px 12px; flex: 1 1 100px; }
-    .arch-arrow { font-size: 1.2rem; }
-
-    /* Code blocks: smaller font on mobile */
-    .code-block, .rust-code-block { font-size: 0.72rem; padding: 12px; }
-
-    /* Container padding tighten */
-    .container { padding-inline: 16px; }
-    .nav-inner { padding-inline: 16px; }
-
-    /* Feature card padding reduce */
-    .feature-card { padding: 24px; overflow-wrap: break-word; word-break: break-word; }
-    .config-card { padding: 20px; }
-
-    /* Rust diagram padding reduce */
-    .rust-diagram { padding: 20px; }
-    .rust-layer { padding: 16px; }
-    .rust-feature { padding: 20px; }
-    .rust-safety { padding: 20px; }
-
-    /* Hero padding adjust */
-    .hero { padding: 100px 16px 60px; }
-
-    /* Ensure no element exceeds viewport */
-    .container, .nav-inner, .hero-content,
-    .features-grid, .config-grid, .arch-chain, .arch-modules,
-    .rust-content, .rust-diagram, .rust-features,
-    .footer-grid, .qs-content, .api-content { max-width: 100%; }
-}
-
-@media (max-width: 480px) {
-    .hero-actions { flex-direction: column; }
-    .btn { width: 100%; justify-content: center; }
-    .hero-stats { grid-template-columns: 1fr 1fr; }
-    .features-grid { grid-template-columns: 1fr; }
-    .config-grid { grid-template-columns: 1fr; }
-    .protocols-grid { grid-template-columns: 1fr; }
-    .qs-tabs { width: 100%; }
-    .qs-tab { flex: 1; text-align: center; padding: 10px 12px; }
-    .arch-node { min-width: 80px; flex: 1 1 80px; padding: 12px 8px; }
-    .arch-node-icon { font-size: 1.5rem; }
-    .arch-node-name { font-size: 0.85rem; }
-    .arch-node-desc { font-size: 0.65rem; }
-}
-</style>
+    <title>LMili（米粒）— 基于 Folia 的高性能 Minecraft 服务端核心</title>
+    <meta name="description" content="Mili 是一个基于 Folia 的高性能 Minecraft 服务端核心：更纯粹的区域多线程体验，更多 API，更稳定。">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #1c2128;
+            --border: #30363d;
+            --text: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #58a6ff;
+            --accent-hover: #79c0ff;
+            --green: #3fb950;
+            --orange: #d29922;
+            --purple: #bc8cff;
+            --red: #f85149;
+            --radius: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "Helvetica Neue", Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { color: var(--accent); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: var(--accent-hover); }
+
+        /* ===== Nav ===== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(13, 17, 23, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 0 24px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        nav .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav .nav-brand .logo-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: #fff;
+            font-weight: 800;
+        }
+
+        nav .nav-links { display: flex; gap: 28px; align-items: center; }
+
+        nav .nav-links a {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        nav .nav-links a:hover { color: var(--text); }
+
+        nav .nav-links .nav-cta {
+            background: var(--accent);
+            color: #fff;
+            padding: 6px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        nav .nav-links .nav-cta:hover { background: var(--accent-hover); color: #fff; }
+
+        .nav-mobile-toggle { display: none; }
+
+        /* ===== Hero ===== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 100px 24px 60px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 80% 50% at 50% 0%, rgba(88, 166, 255, 0.12), transparent),
+                radial-gradient(ellipse 60% 40% at 50% 100%, rgba(188, 140, 255, 0.08), transparent);
+            pointer-events: none;
+        }
+
+        .hero .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(88, 166, 255, 0.1);
+            border: 1px solid rgba(88, 166, 255, 0.3);
+            border-radius: 999px;
+            padding: 6px 18px;
+            font-size: 0.85rem;
+            color: var(--accent);
+            margin-bottom: 32px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .hero-badge .dot {
+            width: 8px; height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero .hero-tagline {
+            font-size: clamp(1rem, 2.5vw, 1.35rem);
+            color: var(--text-muted);
+            max-width: 640px;
+            margin-bottom: 36px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .hero-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .hero-badges img { height: 28px; }
+
+        .hero .hero-actions {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(88, 166, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-card);
+            color: var(--text);
+            border-color: var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+            color: var(--text);
+            border-color: var(--text-muted);
+            transform: translateY(-2px);
+        }
+
+        /* ===== Fork Chain ===== */
+        .fork-chain-section {
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        .fork-chain {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        .fork-chain-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 32px;
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .fork-chain-item:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+        }
+
+        .fork-chain-item.highlight {
+            border-color: var(--accent);
+            background: rgba(88, 166, 255, 0.05);
+        }
+
+        .fork-chain-item .fc-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .fork-chain-item .fc-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .fork-chain-arrow {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            padding: 0 12px;
+        }
+
+        /* ===== Section ===== */
+        section {
+            padding: 80px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 56px;
+        }
+
+        .section-header h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== Feature Cards ===== */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card .fc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            font-size: 0.92rem;
+            line-height: 1.65;
+        }
+
+        .feature-card ul {
+            list-style: none;
+            margin-top: 12px;
+        }
+
+        .feature-card ul li {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            padding: 4px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .feature-card ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        /* ===== Stability Detail ===== */
+        .stability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .stability-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            border-left: 3px solid var(--accent);
+            transition: all 0.3s;
+        }
+
+        .stability-item:hover { background: var(--bg-hover); }
+
+        .stability-item .si-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .stability-item .si-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .stability-item .si-tag {
+            display: inline-block;
+            font-size: 0.72rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-weight: 600;
+        }
+
+        .tag-fatal { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+        .tag-leak { background: rgba(210, 153, 34, 0.15); color: var(--orange); }
+        .tag-race { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+
+        /* ===== API Table ===== */
+        .api-table-wrap {
+            overflow-x: auto;
+            margin-top: 32px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+        }
+
+        .api-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .api-table th {
+            background: var(--bg-card);
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .api-table td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .api-table tr:last-child td { border-bottom: none; }
+        .api-table tr:hover td { background: var(--bg-hover); }
+
+        .api-table .api-name {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .api-table code {
+            background: rgba(110, 118, 129, 0.2);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--purple);
+        }
+
+        /* ===== Quick Start ===== */
+        .quick-start-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        .qs-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .qs-tab {
+            padding: 14px 24px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .qs-tab.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .qs-panel { display: none; padding: 24px; }
+        .qs-panel.active { display: block; }
+
+        .qs-panel pre {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .qs-panel pre code {
+            font-family: "JetBrains Mono", "Fira Code", "Consolas", "Courier New", monospace;
+            color: var(--text);
+        }
+
+        .qs-comment { color: var(--text-muted); }
+        .qs-keyword { color: var(--purple); }
+        .qs-string { color: var(--green); }
+
+        .qs-info {
+            background: rgba(88, 166, 255, 0.08);
+            border: 1px solid rgba(88, 166, 255, 0.2);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            font-size: 0.88rem;
+            color: var(--text-muted);
+        }
+
+        .qs-info strong { color: var(--accent); }
+
+        /* ===== Project Structure ===== */
+        .structure-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 32px;
+            overflow-x: auto;
+        }
+
+        .structure-card pre {
+            font-family: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+            font-size: 0.85rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        .structure-card pre .dir { color: var(--accent); font-weight: 600; }
+        .structure-card pre .comment { color: #6e7681; }
+
+        /* ===== Config ===== */
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .config-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            transition: all 0.3s;
+        }
+
+        .config-card:hover { border-color: var(--accent); }
+
+        .config-card .cc-category {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 3px 10px;
+            border-radius: 999px;
+            display: inline-block;
+            margin-bottom: 12px;
+        }
+
+        .cc-function { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+        .cc-experiment { background: rgba(188, 140, 255, 0.15); color: var(--purple); }
+        .cc-optimizations { background: rgba(88, 166, 255, 0.15); color: var(--accent); }
+        .cc-fixes { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+        .cc-misc { background: rgba(210, 153, 34, 0.15); color: var(--orange); }
+
+        .config-card h4 { font-size: 1rem; margin-bottom: 8px; }
+
+        .config-card p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .config-card .cc-modules {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+
+        /* ===== Protocol Support ===== */
+        .protocol-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .protocol-chip {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .protocol-chip:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .protocol-chip .pc-name {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .protocol-chip .pc-desc {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ===== Stats ===== */
+        .stats-section {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            padding: 60px 24px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .stat-item .stat-num {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent), var(--purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-item .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== Links ===== */
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-top: 40px;
+        }
+
+        .link-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s;
+        }
+
+        .link-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        .link-card .lc-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            background: rgba(88, 166, 255, 0.1);
+            flex-shrink: 0;
+        }
+
+        .link-card .lc-info h4 { font-size: 1rem; }
+        .link-card .lc-info p { font-size: 0.82rem; color: var(--text-muted); }
+
+        /* ===== Footer ===== */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 48px 24px 32px;
+            text-align: center;
+        }
+
+        footer .footer-brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        footer .footer-text {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-bottom: 16px;
+        }
+
+        footer .footer-links {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        footer .footer-links a {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+        footer .footer-links a:hover { color: var(--text); }
+
+        footer .footer-license {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            nav .nav-links { display: none; }
+            .nav-mobile-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: var(--text);
+                font-size: 1.5rem;
+                cursor: pointer;
+            }
+            nav .nav-links.mobile-open {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                border-bottom: 1px solid var(--border);
+                padding: 20px;
+                gap: 16px;
+            }
+            section { padding: 60px 20px; }
+            .fork-chain { flex-direction: column; }
+            .fork-chain-arrow { transform: rotate(90deg); padding: 8px 0; }
+        }
+    </style>
 </head>
 <body>
-    <!-- ========== Navigation ========== -->
-    <nav id="navbar" class="navbar">
-        <div class="nav-inner">
-            <a href="#hero" class="nav-logo">
-                <span class="logo-icon">&#127837;</span>
-                <span class="logo-text">Mili</span>
-            </a>
-            <div class="nav-links" id="navLinks">
-                <a href="#features" class="nav-link" data-i18n="nav.features">特性</a>
-                <a href="#architecture" class="nav-link" data-i18n="nav.architecture">架构</a>
-                <a href="#rust" class="nav-link" data-i18n="nav.rust">Rust 引擎</a>
-                <a href="#protocols" class="nav-link" data-i18n="nav.protocols">协议</a>
-                <a href="#config" class="nav-link" data-i18n="nav.config">配置</a>
-                <a href="#quickstart" class="nav-link" data-i18n="nav.quickstart">快速上手</a>
-                <a href="#api" class="nav-link" data-i18n="nav.api">API</a>
-                <a href="https://github.com/xucy10/Mili" class="nav-link nav-github" target="_blank" rel="noopener">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                    GitHub
-                </a>
-            </div>
-            <button class="nav-btn lang-toggle" id="langToggle" aria-label="Switch language">EN</button>
-            <button class="nav-btn" id="themeToggle" aria-label="Toggle theme">
-                <svg class="icon-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="3"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                <svg class="icon-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            </button>
-            <button class="nav-menu-btn" id="navMenuBtn" aria-label="Menu">
-                <span></span><span></span><span></span>
-            </button>
-        </div>
-    </nav>
 
-    <!-- ========== Hero ========== -->
-    <section id="hero" class="hero">
-        <div class="hero-bg-grid"></div>
-        <div class="hero-bg-glow"></div>
-        <div class="hero-content">
-            <div class="hero-badge reveal">
-                <span class="pulse-dot"></span>
-                <span data-i18n="hero.badge">MC 26.2 &middot; Folia-Powered &middot; Rust edition 2024</span>
-            </div>
-            <h1 class="hero-title reveal"><span class="gradient-text">Mili</span></h1>
-            <p class="hero-subtitle reveal">
-                <span data-i18n="hero.subtitle">基于 Folia 的高性能 Minecraft 服务端核心，融合 Rust 原生加速与深度生电兼容</span><br>
-                <span class="hero-tagline" data-i18n="hero.tagline">Rust 原生加速 &middot; 红石全兼容 &middot; Carpet 协议支持 &middot; 假玩家系统 &middot; ReplayMod 摄影师</span>
-            </p>
-            <div class="hero-actions reveal">
-                <a href="#quickstart" class="btn btn-primary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-                    <span data-i18n="hero.btn.start">快速上手</span>
-                </a>
-                <a href="https://github.com/xucy10/Mili/releases" class="btn btn-secondary" target="_blank" rel="noopener">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    <span data-i18n="hero.btn.download">下载</span>
-                </a>
-            </div>
-            <div class="hero-stats reveal">
-                <div class="stat">
-                    <span class="stat-value">GPL-3.0</span>
-                    <span class="stat-label" data-i18n="hero.stats.license">License</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-value">JDK 25+</span>
-                    <span class="stat-label" data-i18n="hero.stats.runtime">Runtime</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-value">Rust</span>
-                    <span class="stat-label" data-i18n="hero.stats.native">Native Engine</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-value">121+</span>
-                    <span class="stat-label" data-i18n="hero.stats.modules">Feature Patches</span>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator"><span></span></div>
-    </section>
+<!-- ===== Navigation ===== -->
+<nav>
+    <div class="nav-brand">
+        <div class="logo-icon">M</div>
+        Mili
+    </div>
+    <button class="nav-mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')">&#9776;</button>
+    <div class="nav-links">
+        <a href="#features">核心特性</a>
+        <a href="#stability">稳定性修复</a>
+        <a href="#api">API 扩展</a>
+        <a href="#quickstart">快速开始</a>
+        <a href="#config">配置系统</a>
+        <a href="#protocols">协议支持</a>
+        <a href="https://github.com/xucy10/Mili" class="nav-cta" target="_blank" rel="noopener">GitHub</a>
+    </div>
+</nav>
 
-    <!-- ========== Features ========== -->
-    <section id="features" class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="features.label">核心特性</span>
-                <h2 class="section-title" data-i18n="features.title">为什么选择 Mili?</h2>
-                <p class="section-desc" data-i18n="features.desc">在 Folia 区域多线程调度模型上构建的增强运行时</p>
-            </div>
-            <div class="features-grid">
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-                    <h3 data-i18n="features.rust.title">Rust 原生加速</h3>
-                    <p data-i18n="features.rust.desc">通过 JNI 桥接 Rust 原生库（mili_optimizer.dll/.so/.dylib），加速实体视锥剔除、TOML 配置读写等高频路径。零拷贝 DirectByteBuffer + Rayon 并行，每 tick 仅需 M 次 JNI 调用而非 N*M 次。缺失时自动回退纯 Java。</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
-                    <h3 data-i18n="features.toml.title">TOML 配置系统</h3>
-                    <p data-i18n="features.toml.desc">使用 Rust toml_edit 引擎替代 NightConfig，完整保留注释，支持热重载与递归删除。JSON 批量传输在 JNI 边界高效传递配置数据，读写性能显著提升。</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
-                    <h3 data-i18n="features.balancer.title">Folia 稳定性修复</h3>
-                    <p data-i18n="features.balancer.desc">Region Balancer 共享线程池 + 优先级队列替代每区域独占线程；无锁滑动窗口统计 tick 耗时；自适应 TPS 管理；跨区事件队列；全局 UUID 注册中心防碰撞；catch(Throwable) 加固防止 Error 导致调度器静默死亡。</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
-                    <h3 data-i18n="features.redstone.title">红石与生电兼容</h3>
-                    <p data-i18n="features.redstone.desc">从 Leaves/Lophine 移植并适配 Folia 的全套红石修复：更新抑制（捕获异常防崩溃）、红石忽略向上更新、即时方块更新器、旧方块移除行为、羊毛漏斗计数器。生电机器安心运行，原版行为一个不少。</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
-                    <h3 data-i18n="features.carpet.title">Carpet 与协议兼容</h3>
-                    <p data-i18n="features.carpet.desc">50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 实时同步。TISCM、Jade、Syncmatica、Servux、XaeroMap、REI、BBOR、AppleSkin 等客户端 mod 协议全适配。</p>
-                </div>
-                <div class="feature-card reveal">
-                    <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
-                    <h3 data-i18n="features.storage.title">假玩家与摄影师</h3>
-                    <p data-i18n="features.storage.desc">从 Leaves 移植的假玩家系统：创建/管理/移除假玩家，常驻、背包操作、动作执行（攻击、破坏、钓鱼、跳跃、移动等），配套完整 Java 事件 API。ReplayMod 摄影师实体录像，Photographer / PhotographerManager API。</p>
-                </div>
-            </div>
-        </div>
-    </section>
+<!-- ===== Hero ===== -->
+<div class="hero">
+    <div class="hero-badge">
+        <span class="dot"></span>
+        基于 Folia 区域多线程调度
+    </div>
+    <h1><span class="gradient-text">Mili</span>（米粒）</h1>
+    <p class="hero-tagline">
+        基于 Folia 的高性能 Minecraft 服务端核心：<br>
+        更纯粹的区域多线程体验，更多 API，更稳定
+    </p>
+    <div class="hero-badges">
+        <img src="https://img.shields.io/badge/Minecraft-26.2-green" alt="Minecraft 26.2">
+        <img src="https://img.shields.io/badge/JDK-25+-orange" alt="JDK 25+">
+        <img src="https://img.shields.io/badge/License-GPL--3.0-blue" alt="GPL-3.0">
+    </div>
+    <div class="hero-actions">
+        <a href="#quickstart" class="btn btn-primary">快速开始</a>
+        <a href="https://github.com/xucy10/Mili" class="btn btn-secondary" target="_blank" rel="noopener">查看源码</a>
+    </div>
+</div>
 
-    <!-- ========== Architecture ========== -->
-    <section id="architecture" class="section section-alt">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="arch.label">架构</span>
-                <h2 class="section-title" data-i18n="arch.title">继承链</h2>
-                <p class="section-desc" data-i18n="arch.desc">基于 Hyacinthusweight 补丁系统的多层 Fork 架构</p>
-            </div>
-            <div class="arch-chain reveal">
-                <div class="arch-node">
-                    <div class="arch-node-icon">&#127837;</div>
-                    <div class="arch-node-name">Minecraft</div>
-                    <div class="arch-node-desc" data-i18n="arch.node.vanilla">Vanilla</div>
-                </div>
-                <div class="arch-arrow">&rarr;</div>
-                <div class="arch-node">
-                    <div class="arch-node-icon">&#128230;</div>
-                    <div class="arch-node-name">Paper</div>
-                    <div class="arch-node-desc" data-i18n="arch.node.paper">Server Framework</div>
-                </div>
-                <div class="arch-arrow">&rarr;</div>
-                <div class="arch-node">
-                    <div class="arch-node-icon">&#129520;</div>
-                    <div class="arch-node-name">Folia</div>
-                    <div class="arch-node-desc" data-i18n="arch.node.folia">Region Multithreading</div>
-                </div>
-                <div class="arch-arrow">&rarr;</div>
-                <div class="arch-node arch-node-highlight">
-                    <div class="arch-node-icon">&#127837;</div>
-                    <div class="arch-node-name">Mili</div>
-                    <div class="arch-node-desc" data-i18n="arch.node.mili">Rust + Stability</div>
-                </div>
-            </div>
-            <div class="arch-note reveal">
-                <span data-i18n="arch.note">Mili 原为 Lophine/Luminol 的衍生分支，现已迁移为直接基于 Folia，将 Luminol 的优化源码内联合并。（Luminol 已在与 Canvas 争议中删库）</span>
-            </div>
-            <div class="arch-modules reveal">
-                <div class="arch-module">
-                    <span class="arch-module-tag">API</span>
-                    <div class="arch-module-body"><code>mili-api</code><code>folia-api</code><code>paper-api</code></div>
-                    <p data-i18n="arch.module.api">对外暴露的 API 与兼容适配层，包含 Bot、Photographer、事件 API</p>
-                </div>
-                <div class="arch-module">
-                    <span class="arch-module-tag">Server</span>
-                    <div class="arch-module-body"><code>mili-server</code><code>folia-server</code><code>paper-server</code></div>
-                    <p data-i18n="arch.module.server">服务端核心逻辑的补丁与增强实现，121 个 feature 补丁</p>
-                </div>
-                <div class="arch-module arch-module-highlight">
-                    <span class="arch-module-tag">Native</span>
-                    <div class="arch-module-body"><code>mili-rust</code></div>
-                    <p data-i18n="arch.module.native">Rust JNI 原生优化模块 (toml_edit, serde, jni, rayon, edition 2024)</p>
-                </div>
-            </div>
+<!-- ===== Fork Chain ===== -->
+<div class="fork-chain-section">
+    <div class="section-header">
+        <h2>继承链</h2>
+        <p>Mili 站在Folia 的肩膀上，专注于在区域多线程模型上提供更多能力</p>
+    </div>
+    <div class="fork-chain">
+        <div class="fork-chain-item">
+            <div class="fc-name">Minecraft</div>
+            <div class="fc-desc">原版服务端</div>
         </div>
-    </section>
-
-    <!-- ========== Rust Engine ========== -->
-    <section id="rust" class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="rust.label">Rust 引擎</span>
-                <h2 class="section-title" data-i18n="rust.title">原生加速架构</h2>
-                <p class="section-desc" data-i18n="rust.desc">Rust edition 2024 + JNI 批量处理，零拷贝传递，多核并行</p>
-            </div>
-            <div class="rust-content">
-                <div class="rust-diagram reveal">
-                    <div class="rust-layer rust-layer-java">
-                        <div class="rust-layer-title">Java (mili-server)</div>
-                        <div class="rust-layer-items"><span>TomlConfigData</span><span>RustBridge</span><span>EntityCuller</span><span>ConfigManager</span></div>
-                    </div>
-                    <div class="rust-bridge">
-                        <div class="rust-bridge-label">JNI Boundary</div>
-                        <div class="rust-bridge-protocol"><div>DirectByteBuffer</div><div>Batch Processing</div><div>Zero Copy</div></div>
-                    </div>
-                    <div class="rust-layer rust-layer-native">
-                        <div class="rust-layer-title">Rust (mili-rust, edition 2024)</div>
-                        <div class="rust-layer-items"><span>entity_cull.rs</span><span>frustum.rs</span><span>config.rs</span><span>jni_bridge.rs</span><span>lib.rs</span><span>rayon</span></div>
-                    </div>
-                </div>
-                <div class="rust-features reveal">
-                    <div class="rust-feature">
-                        <h4 data-i18n="rust.cull.title">实体视锥剔除</h4>
-                        <p data-i18n="rust.cull.desc">6 平面 AABB frustum 测试，Java 侧将实体数据打包进 DirectByteBuffer，Rust 通过 GetDirectBufferAddress 直接读取内存地址。每 tick 仅需 M 次 JNI 调用（M = 观察者数量），而非 N*M 次。</p>
-                        <div class="rust-code-block"><span style="color:var(--syn-c)">// Java: pack entities into buffer, one JNI call per observer</span>
-<span style="color:var(--syn-k)">var</span> buf = ByteBuffer.allocateDirect(entities.size() * <span style="color:var(--syn-n)">32</span>);
-<span style="color:var(--syn-k)">for</span> (<span style="color:var(--syn-k)">var</span> e : entities) { buf.putFloat(e.getX()); <span style="color:var(--syn-c)">/* ... */</span> }
-<span style="color:var(--syn-k)">int</span>[] visible = RustBridge.cullEntities(buf, count, planes);</div>
-                    </div>
-                    <div class="rust-feature">
-                        <h4 data-i18n="rust.toml.title">TOML 配置引擎</h4>
-                        <p data-i18n="rust.toml.desc">Rust toml_edit 替代 NightConfig。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。支持热重载与递归删除。</p>
-                        <div class="rust-code-block"><span style="color:var(--syn-k)">pub fn</span> load_config(path: &<span style="color:var(--syn-t)">str</span>) -> <span style="color:var(--syn-t)">Option</span>&lt;<span style="color:var(--syn-t)">String</span>&gt; {
-    <span style="color:var(--syn-k)">let</span> content = fs::read_to_string(path).ok()?;
-    parse_toml_to_json(&content)
-}</div>
-                    </div>
-                    <div class="rust-feature">
-                        <h4 data-i18n="rust.cross.title">跨平台原生库</h4>
-                        <p data-i18n="rust.cross.desc">自动检测操作系统并从 JAR 中释放对应的原生库：Windows .dll、Linux .so、macOS .dylib。缺失时自动回退纯 Java 实现。Rust 单独编译支持 cargo clippy（0 warning）与 cargo test（28 个单元测试）。</p>
-                        <div class="rust-code-block"><span style="color:var(--syn-c)">// Extract native lib from JAR at runtime</span>
-<span style="color:var(--syn-t)">Path</span> dst = tmp.resolve(lib);
-<span style="color:var(--syn-t)">Files</span>.copy(jarEntry, dst, REPLACE_EXISTING);
-<span style="color:var(--syn-t)">System</span>.load(dst.toAbsolutePath().toString());</div>
-                    </div>
-                </div>
-            </div>
-            <div class="rust-safety reveal">
-                <h4 data-i18n="rust.safety.title">安全设计</h4>
-                <div class="rust-safety-list">
-                    <div class="rust-safety-item">
-                        <div class="rust-safety-item-icon">&#8702;</div>
-                        <div class="rust-safety-item-body">
-                            <strong data-i18n="rust.safety.1.title">catch_unwind 边界保护</strong>
-                            <span data-i18n="rust.safety.1.desc">所有 JNI 入口用 catch_unwind(AssertUnwindSafe(...)) 包装，防止 Rust panic 跨 JNI 边界传播至 Java 侧</span>
-                        </div>
-                    </div>
-                    <div class="rust-safety-item">
-                        <div class="rust-safety-item-icon">&#8702;</div>
-                        <div class="rust-safety-item-body">
-                            <strong data-i18n="rust.safety.2.title">#[unsafe(no_mangle)]</strong>
-                            <span data-i18n="rust.safety.2.desc">符合 Rust edition 2024 规范的导出符号声明，显式标注 unsafe 意图</span>
-                        </div>
-                    </div>
-                    <div class="rust-safety-item">
-                        <div class="rust-safety-item-icon">&#8702;</div>
-                        <div class="rust-safety-item-body">
-                            <strong data-i18n="rust.safety.3.title">overflow-checks=true</strong>
-                            <span data-i18n="rust.safety.3.desc">Release 构建中开启算术溢出检查，防止整数溢出导致的未定义行为</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="fork-chain-arrow">&#8594;</div>
+        <div class="fork-chain-item">
+            <div class="fc-name">Paper</div>
+            <div class="fc-desc">服务端框架</div>
         </div>
-    </section>
-
-    <!-- ========== Protocols ========== -->
-    <section id="protocols" class="section section-alt">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="proto.label">协议兼容</span>
-                <h2 class="section-title" data-i18n="proto.title">客户端协议全适配</h2>
-                <p class="section-desc" data-i18n="proto.desc">10+ 客户端 mod 协议原生支持，连上即用</p>
-            </div>
-            <div class="protocols-grid">
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6v6H9z"/></svg></div>
-                        <div class="protocol-card-name">Carpet</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.carpet">50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 同步</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/></svg></div>
-                        <div class="protocol-card-name">TISCM</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.tiscm">tiscm:network/v1，MSPT 广播、握手协议</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
-                        <div class="protocol-card-name">XaeroMap</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.xaero">Xaero 地图通道支持</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/></svg></div>
-                        <div class="protocol-card-name">Jade</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.jade">Jade 服务端数据提供</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M8 21H3v-5"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/></svg></div>
-                        <div class="protocol-card-name">Syncmatica</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.sync">Litematic 同步</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
-                        <div class="protocol-card-name">Servux</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.servux">Servux 客户端服务</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v6h6V2"/><path d="M5 8h14l-1 12H6L5 8z"/></svg></div>
-                        <div class="protocol-card-name">REI</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.rei">Roughly Enough Items 服务端协议</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
-                        <div class="protocol-card-name">BBOR</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.bbor">Bounding Box Outline Reloaded</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10"/><path d="M12 6v6l4 2"/></svg></div>
-                        <div class="protocol-card-name">AppleSkin</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.appleskin">饥饿/饱和度同步</div>
-                </div>
-                <div class="protocol-card reveal">
-                    <div class="protocol-card-header">
-                        <div class="protocol-card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M3 12h18"/><path d="M12 3v18"/></svg></div>
-                        <div class="protocol-card-name">Alt Block Placement</div>
-                    </div>
-                    <div class="protocol-card-desc" data-i18n="proto.altblock">Accurate/Carpet/Litematica 放置协议</div>
-                </div>
-            </div>
+        <div class="fork-chain-arrow">&#8594;</div>
+        <div class="fork-chain-item">
+            <div class="fc-name">Folia</div>
+            <div class="fc-desc">区域多线程调度</div>
         </div>
-    </section>
-
-    <!-- ========== Config System ========== -->
-    <section id="config" class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="config.label">配置系统</span>
-                <h2 class="section-title" data-i18n="config.title">六大类别配置</h2>
-                <p class="section-desc" data-i18n="config.desc">两套 TOML 配置文件，覆盖从性能到功能的全面控制</p>
-            </div>
-            <div class="config-grid">
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-func">Function</span><span class="config-count" data-i18n="config.func.count">function</span></div>
-                    <h3 data-i18n="config.func.title">功能特性</h3>
-                    <ul>
-                        <li data-i18n="config.func.1">Fakeplayer（假玩家系统）</li>
-                        <li data-i18n="config.func.2">WoolHopperCounter（羊毛漏斗计数器）</li>
-                        <li data-i18n="config.func.3">ReplayAPI（ReplayMod 摄影师）</li>
-                        <li data-i18n="config.func.4">LanguageConfig（语言配置）</li>
-                        <li data-i18n="config.func.5">ContainerExpansionConfig</li>
-                        <li data-i18n="config.func.6">RedstoneStats（红石统计）</li>
-                    </ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-exp">Experiment</span><span class="config-count" data-i18n="config.exp.count">experiment</span></div>
-                    <h3 data-i18n="config.exp.title">实验性功能</h3>
-                    <ul>
-                        <li data-i18n="config.exp.1">RegionBalancerConfig（区域负载均衡）</li>
-                        <li data-i18n="config.exp.2">CrossRegionHelperConfig（跨区事件队列）</li>
-                        <li data-i18n="config.exp.3">GlobalEntitiesCounter（全局实体计数器）</li>
-                        <li data-i18n="config.exp.4">RayTrackingEntityTracker</li>
-                        <li data-i18n="config.exp.5">RedStoneConfig</li>
-                        <li data-i18n="config.exp.6">EntityDamageSourceTrace</li>
-                    </ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-opt">Optimizations</span><span class="config-count" data-i18n="config.opt.count">optimizations</span></div>
-                    <h3 data-i18n="config.opt.title">性能优化</h3>
-                    <ul>
-                        <li data-i18n="config.opt.1">AsyncPathfinding（异步寻路）</li>
-                        <li data-i18n="config.opt.2">NetworkOptimizerConfig</li>
-                        <li data-i18n="config.opt.3">MmapRegionStorageConfig</li>
-                        <li data-i18n="config.opt.4">ChunkDeltaCompression</li>
-                        <li data-i18n="config.opt.5">DynamicViewDistance（动态视距）</li>
-                        <li data-i18n="config.opt.6">EntityDirtyTracking</li>
-                        <li data-i18n="config.opt.7">VillagerOptimizer</li>
-                    </ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-fix">Fixes</span><span class="config-count" data-i18n="config.fix.count">fixes</span></div>
-                    <h3 data-i18n="config.fix.title">崩溃修复</h3>
-                    <ul>
-                        <li data-i18n="config.fix.1">UpdateSuppressionCrashFixConfig</li>
-                        <li data-i18n="config.fix.2">PortalLinkFix</li>
-                    </ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-misc">Misc</span><span class="config-count" data-i18n="config.misc.count">misc</span></div>
-                    <h3 data-i18n="config.misc.title">杂项</h3>
-                    <ul>
-                        <li>AutoUpdateConfig</li>
-                        <li>BStatsConfig</li>
-                        <li>DisableCheckConfig</li>
-                        <li>ItemEntityConfig</li>
-                    </ul>
-                </div>
-                <div class="config-card reveal">
-                    <div class="config-card-header"><span class="config-badge config-badge-carpet">Carpet</span><span class="config-count" data-i18n="config.carpet.count">carpet</span></div>
-                    <h3 data-i18n="config.carpet.title">Carpet 规则映射</h3>
-                    <ul>
-                        <li data-i18n="config.carpet.1">CoreConfig（核心规则）</li>
-                        <li data-i18n="config.carpet.2">GeneralCompatConfig（通用兼容）</li>
-                        <li data-i18n="config.carpet.3">50+ Carpet/TIS/AMS 规则</li>
-                        <li data-i18n="config.carpet.4">TPS/mobcaps/counter HUD</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="arch-note reveal" style="margin-block-start: 40px;">
-                <span data-i18n="config.files">配置文件：<code>mili_config.toml</code>（主配置，fun.bm.mili.config.modules）和 <code>mili_carpet_config.toml</code>（Carpet 规则，fun.bm.mili.carpet.config.modules）。完整配置项速查表见 Wiki。</span>
-            </div>
+        <div class="fork-chain-arrow">&#8594;</div>
+        <div class="fork-chain-item highlight">
+            <div class="fc-name">Mili</div>
+            <div class="fc-desc">本项目</div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <!-- ========== Quick Start ========== -->
-    <section id="quickstart" class="section section-alt">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="qs.label">快速上手</span>
-                <h2 class="section-title" data-i18n="qs.title">开始使用</h2>
-                <p class="section-desc" data-i18n="qs.desc">从源码构建或直接下载预编译版本</p>
+<!-- ===== Stats ===== -->
+<div class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-num">97+</div>
+            <div class="stat-label">Feature 补丁</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">22+</div>
+            <div class="stat-label">线程安全修复</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">6</div>
+            <div class="stat-label">API 扩展</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">10+</div>
+            <div class="stat-label">客户端协议支持</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-num">5</div>
+            <div class="stat-label">配置分类</div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== Core Features ===== -->
+<section id="features">
+    <div class="section-header">
+        <h2>核心特性</h2>
+        <p>在 Folia 区域多线程调度模型之上，提供稳定性修复、性能优化与 API 扩展</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(88, 166, 255, 0.1); color: var(--accent);">&#9881;</div>
+            <h3>Folia 稳定性修复</h3>
+            <p>系统性排查并修复 Folia 区域线程模型下的并发问题与崩溃风险</p>
+            <ul>
+                <li>Region Balancer 共享线程池动态负载均衡</li>
+                <li>无锁滑动窗口统计区域 tick 耗时</li>
+                <li>Adaptive TPS 根据实时负载动态调整</li>
+                <li>全局 UUID 注册中心防止任务 ID 碰撞</li>
+                <li>catch(Exception) &#8594; catch(Throwable) 全面加固</li>
+            </ul>
+        </div>
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(63, 185, 80, 0.1); color: var(--green);">&#128027;</div>
+            <h3>Bug 修复</h3>
+            <p>大量针对 Folia 区域线程模型的修复，覆盖关键游戏行为</p>
+            <ul>
+                <li>玩家重生位置修正</li>
+                <li>实体传送跨区/末影珍珠/维度切换竞态修复</li>
+                <li>区域外寻路/拴绳/目标选择防护</li>
+                <li>POI 更新延迟、区块重载检测</li>
+                <li>RegionizedTaskQueue 并发引用修正</li>
+            </ul>
+        </div>
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(210, 153, 34, 0.1); color: var(--orange);">&#9889;</div>
+            <h3>通用性能优化</h3>
+            <p>来自 Gale / Lithium / Pufferfish / SparklyPaper / Kaiiju 等上游的通用优化</p>
+            <ul>
+                <li>噪声生成、AI 属性集合、大脑映射优化</li>
+                <li>实体移动零位移跳过、canSee 检查优化</li>
+                <li>区块加载查找削减、寻路区域限制</li>
+                <li>网络与协议层优化、区块增量压缩</li>
+                <li>村民 lobotomize（发呆）优化</li>
+            </ul>
+        </div>
+        <div class="feature-card">
+            <div class="fc-icon" style="background: rgba(188, 140, 255, 0.1); color: var(--purple);">&#128268;</div>
+            <h3>API 扩展</h3>
+            <p>在 Folia/Paper API 之上提供更多能力，方便插件开发者</p>
+            <ul>
+                <li>Tick Regions API（区域查询/操作）</li>
+                <li>ReplayMod 摄影师实体 API</li>
+                <li>Bytebuf 自定义数据包读写 API</li>
+                <li>实体传送异步事件</li>
+                <li>Waypoint 路径点追踪 API</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Stability Fixes Detail ===== -->
+<section id="stability">
+    <div class="section-header">
+        <h2>线程安全加固</h2>
+        <p>对全部 Java 源码进行系统性 bug 排查，覆盖致命级、资源泄漏级与并发竞态级问题</p>
+    </div>
+    <div class="stability-grid">
+        <div class="stability-item">
+            <div class="si-title">线程静默死亡修复</div>
+            <div class="si-desc">全项目 22+ 处 catch(Exception) &#8594; catch(Throwable)，防止 OOM/StackOverflow 等 Error 绕过捕获导致调度器线程永久死亡</div>
+            <span class="si-tag tag-fatal">致命级</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">ChunkHotness NaN 修复</div>
+            <div class="si-desc">SCORE_MASK 破坏 double 位布局产生 NaN，已删除 MASK</div>
+            <span class="si-tag tag-fatal">致命级</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">RegionLoadMonitor 索引溢出</div>
+            <div class="si-desc">writeIndex 溢出导致负索引 AIOOBE，改为 Math.floorMod</div>
+            <span class="si-tag tag-fatal">致命级</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">VillagerOptimizer 时间混淆</div>
+            <div class="si-desc">游戏世界时间与系统时间混存导致 elapsed 计算完全错误，已修正</div>
+            <span class="si-tag tag-fatal">致命级</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">RegionBalancer OOM</div>
+            <div class="si-desc">taskRecords 无限增长导致 OOM，已添加 TTL 清理</div>
+            <span class="si-tag tag-leak">资源泄漏</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">MmapRegionStorage 句柄泄漏</div>
+            <div class="si-desc">旧条目失效时未关闭文件句柄，已添加 close() 调用</div>
+            <span class="si-tag tag-leak">资源泄漏</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">ChunkDeltaCompressor native 泄漏</div>
+            <div class="si-desc">Deflater 的 end() 不在 finally 中，native 内存泄漏已修复</div>
+            <span class="si-tag tag-leak">资源泄漏</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">volatile 无 CAS 竞态</div>
+            <div class="si-desc">MiliChunkSystem/SmartRegionManager 的 volatile boolean initialized 改为 AtomicBoolean.compareAndSet</div>
+            <span class="si-tag tag-race">并发竞态</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">Bukkit 集合 CME</div>
+            <div class="si-desc">ChunkRegionBridge 异步线程遍历 Bukkit 集合 CME，改为先快照 ArrayList</div>
+            <span class="si-tag tag-race">并发竞态</span>
+        </div>
+        <div class="stability-item">
+            <div class="si-title">ConcurrentTable NPE</div>
+            <div class="si-desc">全部 .equals() 模式替换为 Objects.equals() 防 NPE</div>
+            <span class="si-tag tag-race">并发竞态</span>
+        </div>
+    </div>
+</section>
+
+<!-- ===== API Extensions ===== -->
+<section id="api">
+    <div class="section-header">
+        <h2>API 扩展</h2>
+        <p>在 Folia/Paper API 之上提供更多能力，让插件开发更灵活，同时，我们弱检查mili-supported: true因为我们引入了一个区域多个线程，这和folia并不相同</p>
+    </div>
+    <div class="api-table-wrap">
+        <table class="api-table">
+            <thead>
+                <tr>
+                    <th>API</th>
+                    <th>说明</th>
+                    <th>关键类/事件</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="api-name">Tick Regions API</td>
+                    <td>查询/操作 tick 区域的 API</td>
+                    <td><code>ThreadedRegion</code> <code>RegionStats</code></td>
+                </tr>
+                <tr>
+                    <td class="api-name">ReplayMod 摄影师</td>
+                    <td>创建 ReplayMod 摄影师实体进行录像</td>
+                    <td><code>Photographer</code> <code>PhotographerManager</code></td>
+                </tr>
+                <tr>
+                    <td class="api-name">Bytebuf API</td>
+                    <td>面向插件的自定义数据包读写 API</td>
+                    <td><code>Bytebuf</code></td>
+                </tr>
+                <tr>
+                    <td class="api-name">实体传送异步事件</td>
+                    <td>异步实体传送与传送门事件</td>
+                    <td><code>EntityTeleportAsyncEvent</code> <code>PreEntityPortalEvent</code> <code>PostEntityPortalEvent</code></td>
+                </tr>
+                <tr>
+                    <td class="api-name">Waypoint API</td>
+                    <td>实体路径点追踪与恢复 API</td>
+                    <td><code>Waypoint</code></td>
+                </tr>
+                <tr>
+                    <td class="api-name">ThreadedRegionizer</td>
+                    <td>获取全局 ThreadedRegionizer 实例的 API</td>
+                    <td><code>ThreadedRegionizer</code></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ===== Quick Start ===== -->
+<section id="quickstart">
+    <div class="section-header">
+        <h2>快速开始</h2>
+        <p>从源码构建 Mili 服务端核心</p>
+    </div>
+    <div class="quick-start-content">
+        <div class="qs-tabs">
+            <div class="qs-tab active" onclick="switchTab(this, 'build')">构建步骤</div>
+            <div class="qs-tab" onclick="switchTab(this, 'gradle')">Gradle 依赖</div>
+            <div class="qs-tab" onclick="switchTab(this, 'maven')">Maven 依赖</div>
+        </div>
+
+        <div class="qs-panel active" id="panel-build">
+            <div class="qs-info">
+                <strong>环境要求：</strong>JDK 25+（Mili 26.2 分支需要 Java 25，不是 JDK 21）| Git 2.x（Windows 需启用长路径支持）
             </div>
-            <div class="qs-tabs reveal">
-                <button class="qs-tab active" data-tab="build" data-i18n="qs.tab.build">从源码构建</button>
-                <button class="qs-tab" data-tab="download" data-i18n="qs.tab.download">下载发行版</button>
-            </div>
-            <div class="qs-content">
-                <div class="qs-panel active" data-panel="build">
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">1</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s1.title">克隆仓库</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Clone and enter directory</span>
+<pre><code><span class="qs-comment"># 1. 克隆仓库</span>
 git clone https://github.com/xucy10/Mili.git
-cd Mili</div>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">2</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s2.title">启用长路径（Windows）</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Windows only: enable long paths</span>
-git config --global core.longpaths true</div>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">3</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s3.title">应用补丁</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Requires JDK 25+, Rust is optional</span>
-./gradlew applyAllPatches --no-configuration-cache --no-build-cache</div>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">4</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s4.title">注入 Kotlin 支持</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Inject Kotlin support (optional)</span>
-python scripts/inject_kotlin.py</div>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">5</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s5.title">编译 Rust 原生库</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Compile Rust native lib (optional, falls back to Java)</span>
-./gradlew :mili-rust:stageRustBinary
-<span style="color:var(--syn-c)"># Or build Rust independently:</span>
-<span style="color:var(--syn-c)"># cd mili-rust/src/rust && cargo build --release</span></div>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">6</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.build.s6.title">构建 Paperclip JAR</h4>
-                            <div class="code-block"><span style="color:var(--syn-c)"># Build Paperclip JAR</span>
-./gradlew :mili-server:createMojmapPaperclipJar
-<span style="color:var(--syn-c)"># Output: mili-server/build/libs/mili-paperclip-26.2-R0.1-SNAPSHOT.jar</span></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="qs-panel" data-panel="download">
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">1</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.dl.s1.title">从 GitHub Releases 下载</h4>
-                            <p data-i18n="qs.dl.s1.desc">访问 Releases 页面，下载最新的 Paperclip JAR 文件。</p>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">2</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.dl.s2.title">环境要求</h4>
-                            <ul class="qs-list">
-                                <li data-i18n="qs.dl.s2.1">JDK 25 或更高版本（不是 JDK 21）</li>
-                                <li>Minecraft 26.2</li>
-                                <li data-i18n="qs.dl.s2.3">推荐 4+ 核 CPU 以发挥 Folia 多线程优势</li>
-                                <li data-i18n="qs.dl.s2.4">Rust stable (edition 2024) — 可选，用于编译原生优化库</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="qs-step reveal">
-                        <div class="qs-step-num">3</div>
-                        <div class="qs-step-body">
-                            <h4 data-i18n="qs.dl.s3.title">启动服务器</h4>
-                            <div class="code-block">java -jar mili-paperclip-26.2-R0.1-SNAPSHOT.jar --nogui</div>
-                        </div>
-                    </div>
-                </div>
+cd Mili
+
+<span class="qs-comment"># 2. Windows 需启用长路径</span>
+git config --global core.longpaths true
+
+<span class="qs-comment"># 3. 应用补丁（首次构建必须执行）</span>
+./gradlew applyAllPatches --no-configuration-cache --no-build-cache
+
+<span class="qs-comment"># 4. 注入 Kotlin 支持</span>
+python scripts/inject_kotlin.py
+
+<span class="qs-comment"># 5. 构建 Paperclip JAR</span>
+./gradlew :mili-server:createPaperclipJar</code></pre>
+            <div class="qs-info" style="margin-top: 16px;">
+                <strong>构建产物：</strong><code>mili-server/build/libs/mili-26.2-paperclip.jar</code> &#8212; 可直接运行的 Paperclip JAR
             </div>
         </div>
-    </section>
 
-    <!-- ========== API Usage ========== -->
-    <section id="api" class="section">
-        <div class="container">
-            <div class="section-header reveal">
-                <span class="section-label" data-i18n="api.label">API</span>
-                <h2 class="section-title" data-i18n="api.title">依赖接入</h2>
-                <p class="section-desc" data-i18n="api.desc">通过 Maven 仓库引入 Mili API 进行插件开发</p>
-            </div>
-            <div class="qs-tabs reveal">
-                <button class="qs-tab active" data-tab="gradle" data-i18n="api.tab.gradle">Gradle (Kotlin DSL)</button>
-                <button class="qs-tab" data-tab="maven" data-i18n="api.tab.maven">Maven</button>
-            </div>
-            <div class="api-content">
-                <div class="api-panel active" data-panel="gradle">
-                    <div class="code-block"><span style="color:var(--syn-k)">repositories</span> {
+        <div class="qs-panel" id="panel-gradle">
+<pre><code>repositories {
     maven {
-        url = uri(<span style="color:var(--syn-s)">"https://repo.menthamc.org/repository/maven-public/"</span>)
+        url = <span class="qs-string">"https://repo.menthamc.org/repository/maven-public/"</span>
     }
 }
 
-<span style="color:var(--syn-k)">dependencies</span> {
-    compileOnly(<span style="color:var(--syn-s)">"fun.bm.mili:mili-api:26.2-R0.1-SNAPSHOT"</span>)
-}</div>
-                </div>
-                <div class="api-panel" data-panel="maven">
-                    <div class="code-block"><span style="color:var(--syn-k)">&lt;repositories&gt;</span>
-  <span style="color:var(--syn-k)">&lt;repository&gt;</span>
-    <span style="color:var(--syn-t)">&lt;id&gt;</span>menthamc<span style="color:var(--syn-t)">&lt;/id&gt;</span>
-    <span style="color:var(--syn-t)">&lt;url&gt;</span>https://repo.menthamc.org/repository/maven-public/<span style="color:var(--syn-t)">&lt;/url&gt;</span>
-  <span style="color:var(--syn-k)">&lt;/repository&gt;</span>
-<span style="color:var(--syn-k)">&lt;/repositories&gt;</span>
-
-<span style="color:var(--syn-k)">&lt;dependencies&gt;</span>
-  <span style="color:var(--syn-k)">&lt;dependency&gt;</span>
-    <span style="color:var(--syn-t)">&lt;groupId&gt;</span>fun.bm.mili<span style="color:var(--syn-t)">&lt;/groupId&gt;</span>
-    <span style="color:var(--syn-t)">&lt;artifactId&gt;</span>mili-api<span style="color:var(--syn-t)">&lt;/artifactId&gt;</span>
-    <span style="color:var(--syn-t)">&lt;version&gt;</span>26.2-R0.1-SNAPSHOT<span style="color:var(--syn-t)">&lt;/version&gt;</span>
-    <span style="color:var(--syn-t)">&lt;scope&gt;</span>provided<span style="color:var(--syn-t)">&lt;/scope&gt;</span>
-  <span style="color:var(--syn-k)">&lt;/dependency&gt;</span>
-<span style="color:var(--syn-k)">&lt;/dependencies&gt;</span></div>
-                </div>
-                <div class="api-note reveal">
-                    <span data-i18n="api.note">API 模块路径：<code>fun.bm.mili</code>。包含 Bot、Photographer、事件 API 等。插件开发请使用 <code>compileOnly</code>（Gradle）或 <code>provided</code>（Maven）scope。</span>
-                </div>
-            </div>
+dependencies {
+    compileOnly(<span class="qs-string">"fun.bm.mili:mili-api:26.2-R0.1-SNAPSHOT"</span>)
+}</code></pre>
         </div>
-    </section>
 
-    <!-- ========== Footer ========== -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <div class="footer-logo"><span class="logo-icon">&#127837;</span><span class="logo-text">Mili</span></div>
-                    <p class="footer-desc" data-i18n="footer.desc">基于 Folia 的高性能 Minecraft 服务端核心。Rust 原生加速，红石全兼容，Carpet 协议支持，假玩家系统。</p>
-                </div>
-                <div class="footer-col">
-                    <h4 data-i18n="footer.resources">资源</h4>
-                    <ul>
-                        <li><a href="https://github.com/xucy10/Mili" target="_blank" rel="noopener" data-i18n="footer.repo">GitHub 仓库</a></li>
-                        <li><a href="https://github.com/xucy10/Mili/releases" target="_blank" rel="noopener">Releases</a></li>
-                        <li><a href="https://github.com/xucy10/Mili/blob/master/docs/WIKI.md" target="_blank" rel="noopener" data-i18n="footer.wiki">Wiki 文档</a></li>
-                        <li><a href="https://github.com/xucy10/Mili/blob/master/docs/CONTRIBUTING.md" target="_blank" rel="noopener" data-i18n="footer.contrib">贡献指南</a></li>
-                        <li><a href="https://discord.com/invite/BSa67dbvVf" target="_blank" rel="noopener" data-i18n="footer.discord">Discord 社区</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4 data-i18n="footer.upstream">继承链</h4>
-                    <ul>
-                        <li><a href="https://github.com/PaperMC/Folia" target="_blank" rel="noopener">Folia（直接上游）</a></li>
-                        <li><a href="https://github.com/PaperMC/Paper" target="_blank" rel="noopener">Paper</a></li>
-                        <li><a href="https://github.com/LeavesMC/Leaves" target="_blank" rel="noopener">LeavesMC</a></li>
-                        <li><a href="https://github.com/LophineLabs/Lophine" target="_blank" rel="noopener">Lophine</a></li>
-                        <li data-i18n="footer.luminol">Luminol（已删库）</li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4 data-i18n="footer.stack">技术栈</h4>
-                    <ul>
-                        <li>Java 25 (LTS)</li>
-                        <li>Rust (edition 2024)</li>
-                        <li>Gradle + Kotlin DSL</li>
-                        <li>Hyacinthusweight</li>
-                        <li>toml_edit / serde / rayon</li>
-                    </ul>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p data-i18n="footer.license">基于 GPL-3.0 许可证 &middot; 贡献者可选择 MIT</p>
-                <p class="footer-copy" data-i18n="footer.copy">&copy; 2025 Mili Project. 感谢 PaperMC、LeavesMC、Lophine 等上游项目及所有贡献者</p>
-            </div>
+        <div class="qs-panel" id="panel-maven">
+<pre><code><span class="qs-keyword">&lt;repositories&gt;</span>
+  <span class="qs-keyword">&lt;repository&gt;</span>
+    <span class="qs-keyword">&lt;id&gt;</span>menthamc<span class="qs-keyword">&lt;/id&gt;</span>
+    <span class="qs-keyword">&lt;url&gt;</span>https://repo.menthamc.org/repository/maven-public/<span class="qs-keyword">&lt;/url&gt;</span>
+  <span class="qs-keyword">&lt;/repository&gt;</span>
+<span class="qs-keyword">&lt;/repositories&gt;</span>
+
+<span class="qs-keyword">&lt;dependencies&gt;</span>
+  <span class="qs-keyword">&lt;dependency&gt;</span>
+    <span class="qs-keyword">&lt;groupId&gt;</span>fun.bm.mili<span class="qs-keyword">&lt;/groupId&gt;</span>
+    <span class="qs-keyword">&lt;artifactId&gt;</span>mili-api<span class="qs-keyword">&lt;/artifactId&gt;</span>
+    <span class="qs-keyword">&lt;version&gt;</span>26.2-R0.1-SNAPSHOT<span class="qs-keyword">&lt;/version&gt;</span>
+    <span class="qs-keyword">&lt;scope&gt;</span>provided<span class="qs-keyword">&lt;/scope&gt;</span>
+  <span class="qs-keyword">&lt;/dependency&gt;</span>
+<span class="qs-keyword">&lt;/dependencies&gt;</span></code></pre>
         </div>
-    </footer>
+    </div>
+</section>
+
+<!-- ===== Project Structure ===== -->
+<section id="structure">
+    <div class="section-header">
+        <h2>项目结构</h2>
+        <p>模块化设计，职责清晰分离</p>
+    </div>
+    <div class="structure-card">
+<pre><span class="dir">Mili/</span>
+├── <span class="dir">mili-api/</span>                  <span class="comment"># Mili API 模块</span>
+│   └── src/main/java/         <span class="comment">#   事件 API、Photographer、Bytebuf</span>
+├── <span class="dir">mili-server/</span>               <span class="comment"># Mili 服务端核心</span>
+│   ├── minecraft-patches/     <span class="comment">#   97 个特征补丁（features/）</span>
+│   ├── paper-patches/         <span class="comment">#   Paper API/Server 层补丁</span>
+│   └── src/main/
+│       └── java/fun/bm/mili/  <span class="comment">#   Java 源码</span>
+│           ├── bridge/        <span class="comment">#     区块-区域桥接</span>
+│           ├── chunk/         <span class="comment">#     区块系统</span>
+│           ├── command/       <span class="comment">#     命令系统</span>
+│           ├── config/        <span class="comment">#     配置模块（TOML，纯 Java 实现）</span>
+│           ├── metrics/       <span class="comment">#     bStats 统计</span>
+│           ├── portal/        <span class="comment">#     传送门管理</span>
+│           ├── utils/         <span class="comment">#     工具类（区域调度、网络优化、内存管理等）</span>
+│           └── villager/      <span class="comment">#     村民优化器</span>
+├── <span class="dir">lmili-api/</span>                 <span class="comment"># LMili 附加 API 源（包名 fun.bm.mili.lmili）</span>
+├── <span class="dir">folia-server/</span>              <span class="comment"># Folia 子模块（上游，不直接修改）</span>
+├── <span class="dir">paper-server/</span>              <span class="comment"># Paper 服务器（补丁应用目标）</span>
+├── <span class="dir">paper-api/</span>                 <span class="comment"># Paper API（补丁应用目标）</span>
+├── <span class="dir">docs/</span>                      <span class="comment"># 文档</span>
+├── build.gradle.kts           <span class="comment"># 根构建脚本</span>
+└── gradle.properties          <span class="comment"># 版本与上游 ref 配置</span></pre>
+    </div>
+</section>
+
+<!-- ===== Configuration ===== -->
+<section id="config">
+    <div class="section-header">
+        <h2>配置系统</h2>
+        <p>TOML 配置文件（纯 Java 解析实现），覆盖功能开关、实验功能、修复与优化</p>
+    </div>
+    <div class="config-grid">
+        <div class="config-card">
+            <span class="cc-category cc-function">function</span>
+            <h4>游戏机制与实用功能</h4>
+            <p>游戏内行为开关与实用工具</p>
+            <div class="cc-modules">LanguageConfig, TpsBarConfig, RegionBarConfig</div>
+        </div>
+        <div class="config-card">
+            <span class="cc-category cc-experiment">experiment</span>
+            <h4>实验性功能</h4>
+            <p>实验性性能/并发功能，建议测试环境验证</p>
+            <div class="cc-modules">RegionBalancerConfig, CrossDimensionTeleportQueueConfig</div>
+        </div>
+        <div class="config-card">
+            <span class="cc-category cc-optimizations">optimizations</span>
+            <h4>性能优化</h4>
+            <p>通用性能优化开关</p>
+            <div class="cc-modules">NetworkOptimizerConfig, MmapRegionStorageConfig, VillagerOptimizerConfig</div>
+        </div>
+        <div class="config-card">
+            <span class="cc-category cc-fixes">fixes</span>
+            <h4>崩溃/行为修复</h4>
+            <p>针对崩溃与异常行为的修复开关</p>
+            <div class="cc-modules">PortalLinkFixConfig, CollisionBehaviorConfig</div>
+        </div>
+        <div class="config-card">
+            <span class="cc-category cc-misc">misc</span>
+            <h4>杂项</h4>
+            <p>自动更新、统计等杂项配置</p>
+            <div class="cc-modules">AutoUpdateConfig, BStatsConfig, ServerModNameConfig</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Protocol Support ===== -->
+<section id="protocols">
+    <div class="section-header">
+        <h2>客户端协议支持</h2>
+        <p>兼容主流 Minecraft 客户端 Mod 的服务端协议</p>
+    </div>
+    <div class="protocol-grid">
+        <div class="protocol-chip">
+            <div class="pc-name">Carpet</div>
+            <div class="pc-desc">TPS/mobcaps/counter HUD、规则同步</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">TISCM</div>
+            <div class="pc-desc">MSPT 广播、握手</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">XaeroMap</div>
+            <div class="pc-desc">Xaero 地图通道支持</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">Jade</div>
+            <div class="pc-desc">Jade 服务端数据提供</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">Syncmatica</div>
+            <div class="pc-desc">Litematic 同步</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">Servux</div>
+            <div class="pc-desc">Servux 客户端服务</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">REI</div>
+            <div class="pc-desc">Roughly Enough Items 协议</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">BBOR</div>
+            <div class="pc-desc">Bounding Box Outline Reloaded</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">AppleSkin</div>
+            <div class="pc-desc">饥饿/饱和度同步</div>
+        </div>
+        <div class="protocol-chip">
+            <div class="pc-name">Alt Block Placement</div>
+            <div class="pc-desc">Accurate/Carpet/Litematica 放置协议</div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== Links ===== -->
+<section id="links">
+    <div class="section-header">
+        <h2>相关链接</h2>
+        <p>项目源码、上游仓库与文档</p>
+    </div>
+    <div class="links-grid">
+        <a href="https://github.com/xucy10/Mili" class="link-card" target="_blank" rel="noopener">
+            <div class="lc-icon">&#128187;</div>
+            <div class="lc-info">
+                <h4>Mili GitHub</h4>
+                <p>本项目仓库</p>
+            </div>
+        </a>
+        <a href="https://github.com/PaperMC/Folia" class="link-card" target="_blank" rel="noopener">
+            <div class="lc-icon">&#9733;</div>
+            <div class="lc-info">
+                <h4>Folia</h4>
+                <p>直接上游 - 区域多线程调度</p>
+            </div>
+        </a>
+        <a href="https://github.com/PaperMC/Paper" class="link-card" target="_blank" rel="noopener">
+            <div class="lc-icon">&#128221;</div>
+            <div class="lc-info">
+                <h4>Paper</h4>
+                <p>上游服务端框架</p>
+            </div>
+        </a>
+        <a href="https://repo.menthamc.org/repository/maven-public/" class="link-card" target="_blank" rel="noopener">
+            <div class="lc-icon">&#128230;</div>
+            <div class="lc-info">
+                <h4>Maven 仓库</h4>
+                <p>API 依赖获取</p>
+            </div>
+        </a>
+        <a href="https://github.com/xucy10/Mili/blob/main/docs/CONTRIBUTING.md" class="link-card" target="_blank" rel="noopener">
+            <div class="lc-icon">&#129309;</div>
+            <div class="lc-info">
+                <h4>贡献指南</h4>
+                <p>如何参与项目开发</p>
+            </div>
+        </a>
+        <a href="https://github.com/xucy10/Mili/blob/main/docs/WIKI.md" class="link-card" target="_blank" rel="noopener">
+            <div class="lc-icon">&#128218;</div>
+            <div class="lc-info">
+                <h4>项目 Wiki</h4>
+                <p>完整功能文档与配置速查</p>
+            </div>
+        </a>
+    </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+    <div class="footer-brand">Mili（米粒）</div>
+    <p class="footer-text">基于 Folia 的高性能 Minecraft 服务端核心</p>
+    <div class="footer-links">
+        <a href="https://github.com/xucy10/Mili" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/xucy10/Mili/blob/main/README.md">README</a>
+        <a href="https://github.com/xucy10/Mili/blob/main/docs/CONTRIBUTING.md">贡献指南</a>
+        <a href="https://github.com/xucy10/Mili/blob/main/docs/WIKI.md">Wiki</a>
+        <a href="https://github.com/xucy10/Mili/issues">Issue</a>
+    </div>
+    <div class="footer-license">
+        本项目遵循 GPL-3.0 许可证 | Minecraft 26.2 | JDK 25+<br>
+        感谢所有贡献者与赞助方对项目的持续支持
+    </div>
+</footer>
 
 <script>
-(function () {
-    'use strict';
-
-    /* ============================================================
-       i18n — Internationalization Dictionary
-       ============================================================ */
-    var I18N = {
-        zh: {
-            'nav.features': '特性',
-            'nav.architecture': '架构',
-            'nav.rust': 'Rust 引擎',
-            'nav.protocols': '协议',
-            'nav.config': '配置',
-            'nav.quickstart': '快速上手',
-            'nav.api': 'API',
-
-            'hero.badge': 'MC 26.2 · Folia-Powered · Rust edition 2024',
-            'hero.subtitle': '基于 Folia 的高性能 Minecraft 服务端核心，融合 Rust 原生加速与深度生电兼容',
-            'hero.tagline': 'Rust 原生加速 · 红石全兼容 · Carpet 协议支持 · 假玩家系统 · ReplayMod 摄影师',
-            'hero.btn.start': '快速上手',
-            'hero.btn.download': '下载',
-            'hero.stats.license': 'License',
-            'hero.stats.runtime': 'Runtime',
-            'hero.stats.native': 'Native Engine',
-            'hero.stats.modules': 'Feature Patches',
-
-            'features.label': '核心特性',
-            'features.title': '为什么选择 Mili?',
-            'features.desc': '在 Folia 区域多线程调度模型上构建的增强运行时',
-            'features.rust.title': 'Rust 原生加速',
-            'features.rust.desc': '通过 JNI 桥接 Rust 原生库（mili_optimizer.dll/.so/.dylib），加速实体视锥剔除、TOML 配置读写等高频路径。零拷贝 DirectByteBuffer + Rayon 并行，每 tick 仅需 M 次 JNI 调用而非 N×M 次。缺失时自动回退纯 Java。',
-            'features.toml.title': 'TOML 配置系统',
-            'features.toml.desc': '使用 Rust toml_edit 引擎替代 NightConfig，完整保留注释，支持热重载与递归删除。JSON 批量传输在 JNI 边界高效传递配置数据，读写性能显著提升。',
-            'features.balancer.title': 'Folia 稳定性修复',
-            'features.balancer.desc': 'Region Balancer 共享线程池 + 优先级队列替代每区域独占线程；无锁滑动窗口统计 tick 耗时；自适应 TPS 管理；跨区事件队列；全局 UUID 注册中心防碰撞；catch(Throwable) 加固防止 Error 导致调度器静默死亡。',
-            'features.redstone.title': '红石与生电兼容',
-            'features.redstone.desc': '从 Leaves/Lophine 移植并适配 Folia 的全套红石修复：更新抑制（捕获异常防崩溃）、红石忽略向上更新、即时方块更新器、旧方块移除行为、羊毛漏斗计数器。生电机器安心运行，原版行为一个不少。',
-            'features.carpet.title': 'Carpet 与协议兼容',
-            'features.carpet.desc': '50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 实时同步。TISCM、Jade、Syncmatica、Servux、XaeroMap、REI、BBOR、AppleSkin 等客户端 mod 协议全适配。',
-            'features.storage.title': '假玩家与摄影师',
-            'features.storage.desc': '从 Leaves 移植的假玩家系统：创建/管理/移除假玩家，常驻、背包操作、动作执行（攻击、破坏、钓鱼、跳跃、移动等），配套完整 Java 事件 API。ReplayMod 摄影师实体录像，Photographer / PhotographerManager API。',
-
-            'arch.label': '架构',
-            'arch.title': '继承链',
-            'arch.desc': '基于 Hyacinthusweight 补丁系统的多层 Fork 架构',
-            'arch.node.vanilla': 'Vanilla',
-            'arch.node.paper': 'Server Framework',
-            'arch.node.folia': 'Region Multithreading',
-            'arch.node.mili': 'Rust + Stability',
-            'arch.note': 'Mili 原为 Lophine/Luminol 的衍生分支，现已迁移为直接基于 Folia，将 Luminol 的优化源码内联合并。（Luminol 已在与 Canvas 争议中删库）',
-            'arch.module.api': '对外暴露的 API 与兼容适配层，包含 Bot、Photographer、事件 API',
-            'arch.module.server': '服务端核心逻辑的补丁与增强实现，121 个 feature 补丁',
-            'arch.module.native': 'Rust JNI 原生优化模块 (toml_edit, serde, jni, rayon, edition 2024)',
-
-            'rust.label': 'Rust 引擎',
-            'rust.title': '原生加速架构',
-            'rust.desc': 'Rust edition 2024 + JNI 批量处理，零拷贝传递，多核并行',
-            'rust.cull.title': '实体视锥剔除',
-            'rust.cull.desc': '6 平面 AABB frustum 测试，Java 侧将实体数据打包进 DirectByteBuffer，Rust 通过 GetDirectBufferAddress 直接读取内存地址。每 tick 仅需 M 次 JNI 调用（M = 观察者数量），而非 N×M 次。',
-            'rust.toml.title': 'TOML 配置引擎',
-            'rust.toml.desc': 'Rust toml_edit 替代 NightConfig。加载时将 TOML 解析为扁平化 JSON 传递给 Java，保存时接收 JSON 并写回带注释的 TOML。支持热重载与递归删除。',
-            'rust.cross.title': '跨平台原生库',
-            'rust.cross.desc': '自动检测操作系统并从 JAR 中释放对应的原生库：Windows .dll、Linux .so、macOS .dylib。缺失时自动回退纯 Java 实现。Rust 单独编译支持 cargo clippy（0 warning）与 cargo test（28 个单元测试）。',
-            'rust.safety.title': '安全设计',
-            'rust.safety.1.title': 'catch_unwind 边界保护',
-            'rust.safety.1.desc': '所有 JNI 入口用 catch_unwind(AssertUnwindSafe(...)) 包装，防止 Rust panic 跨 JNI 边界传播至 Java 侧',
-            'rust.safety.2.title': '#[unsafe(no_mangle)]',
-            'rust.safety.2.desc': '符合 Rust edition 2024 规范的导出符号声明，显式标注 unsafe 意图',
-            'rust.safety.3.title': 'overflow-checks=true',
-            'rust.safety.3.desc': 'Release 构建中开启算术溢出检查，防止整数溢出导致的未定义行为',
-
-            'proto.label': '协议兼容',
-            'proto.title': '客户端协议全适配',
-            'proto.desc': '10+ 客户端 mod 协议原生支持，连上即用',
-            'proto.carpet': '50+ 条 Carpet/TIS/AMS 规则映射，TPS/mobcaps/counter HUD 同步',
-            'proto.tiscm': 'tiscm:network/v1，MSPT 广播、握手协议',
-            'proto.xaero': 'Xaero 地图通道支持',
-            'proto.jade': 'Jade 服务端数据提供',
-            'proto.sync': 'Litematic 同步',
-            'proto.servux': 'Servux 客户端服务',
-            'proto.rei': 'Roughly Enough Items 服务端协议',
-            'proto.bbor': 'Bounding Box Outline Reloaded',
-            'proto.appleskin': '饥饿/饱和度同步',
-            'proto.altblock': 'Accurate/Carpet/Litematica 放置协议',
-
-            'config.label': '配置系统',
-            'config.title': '六大类别配置',
-            'config.desc': '两套 TOML 配置文件，覆盖从性能到功能的全面控制',
-            'config.func.count': 'function',
-            'config.func.title': '功能特性',
-            'config.func.1': 'Fakeplayer（假玩家系统）',
-            'config.func.2': 'WoolHopperCounter（羊毛漏斗计数器）',
-            'config.func.3': 'ReplayAPI（ReplayMod 摄影师）',
-            'config.func.4': 'LanguageConfig（语言配置）',
-            'config.func.5': 'ContainerExpansionConfig',
-            'config.func.6': 'RedstoneStats（红石统计）',
-            'config.exp.count': 'experiment',
-            'config.exp.title': '实验性功能',
-            'config.exp.1': 'RegionBalancerConfig（区域负载均衡）',
-            'config.exp.2': 'CrossRegionHelperConfig（跨区事件队列）',
-            'config.exp.3': 'GlobalEntitiesCounter（全局实体计数器）',
-            'config.exp.4': 'RayTrackingEntityTracker',
-            'config.exp.5': 'RedStoneConfig',
-            'config.exp.6': 'EntityDamageSourceTrace',
-            'config.opt.count': 'optimizations',
-            'config.opt.title': '性能优化',
-            'config.opt.1': 'AsyncPathfinding（异步寻路）',
-            'config.opt.2': 'NetworkOptimizerConfig',
-            'config.opt.3': 'MmapRegionStorageConfig',
-            'config.opt.4': 'ChunkDeltaCompression',
-            'config.opt.5': 'DynamicViewDistance（动态视距）',
-            'config.opt.6': 'EntityDirtyTracking',
-            'config.opt.7': 'VillagerOptimizer',
-            'config.fix.count': 'fixes',
-            'config.fix.title': '崩溃修复',
-            'config.fix.1': 'UpdateSuppressionCrashFixConfig',
-            'config.fix.2': 'PortalLinkFix',
-            'config.misc.count': 'misc',
-            'config.misc.title': '杂项',
-            'config.carpet.count': 'carpet',
-            'config.carpet.title': 'Carpet 规则映射',
-            'config.carpet.1': 'CoreConfig（核心规则）',
-            'config.carpet.2': 'GeneralCompatConfig（通用兼容）',
-            'config.carpet.3': '50+ Carpet/TIS/AMS 规则',
-            'config.carpet.4': 'TPS/mobcaps/counter HUD',
-            'config.files': '配置文件：<code>mili_config.toml</code>（主配置，fun.bm.mili.config.modules）和 <code>mili_carpet_config.toml</code>（Carpet 规则，fun.bm.mili.carpet.config.modules）。完整配置项速查表见 Wiki。',
-
-            'qs.label': '快速上手',
-            'qs.title': '开始使用',
-            'qs.desc': '从源码构建或直接下载预编译版本',
-            'qs.tab.build': '从源码构建',
-            'qs.tab.download': '下载发行版',
-            'qs.build.s1.title': '克隆仓库',
-            'qs.build.s2.title': '启用长路径（Windows）',
-            'qs.build.s3.title': '应用补丁',
-            'qs.build.s4.title': '注入 Kotlin 支持',
-            'qs.build.s5.title': '编译 Rust 原生库',
-            'qs.build.s6.title': '构建 Paperclip JAR',
-            'qs.dl.s1.title': '从 GitHub Releases 下载',
-            'qs.dl.s1.desc': '访问 Releases 页面，下载最新的 Paperclip JAR 文件。',
-            'qs.dl.s2.title': '环境要求',
-            'qs.dl.s2.1': 'JDK 25 或更高版本（不是 JDK 21）',
-            'qs.dl.s2.3': '推荐 4+ 核 CPU 以发挥 Folia 多线程优势',
-            'qs.dl.s2.4': 'Rust stable (edition 2024) — 可选，用于编译原生优化库',
-            'qs.dl.s3.title': '启动服务器',
-
-            'api.label': 'API',
-            'api.title': '依赖接入',
-            'api.desc': '通过 Maven 仓库引入 Mili API 进行插件开发',
-            'api.tab.gradle': 'Gradle (Kotlin DSL)',
-            'api.tab.maven': 'Maven',
-            'api.note': 'API 模块路径：<code>fun.bm.mili</code>。包含 Bot、Photographer、事件 API 等。插件开发请使用 <code>compileOnly</code>（Gradle）或 <code>provided</code>（Maven）scope。',
-
-            'footer.desc': '基于 Folia 的高性能 Minecraft 服务端核心。Rust 原生加速，红石全兼容，Carpet 协议支持，假玩家系统。',
-            'footer.resources': '资源',
-            'footer.repo': 'GitHub 仓库',
-            'footer.wiki': 'Wiki 文档',
-            'footer.contrib': '贡献指南',
-            'footer.discord': 'Discord 社区',
-            'footer.upstream': '继承链',
-            'footer.stack': '技术栈',
-            'footer.luminol': 'Luminol（已删库）',
-            'footer.license': '基于 GPL-3.0 许可证 · 贡献者可选择 MIT',
-            'footer.copy': '\u00A9 2025 Mili Project. 感谢 PaperMC、LeavesMC、Lophine 等上游项目及所有贡献者'
-        },
-        en: {
-            'nav.features': 'Features',
-            'nav.architecture': 'Architecture',
-            'nav.rust': 'Rust Engine',
-            'nav.protocols': 'Protocols',
-            'nav.config': 'Config',
-            'nav.quickstart': 'Quick Start',
-            'nav.api': 'API',
-
-            'hero.badge': 'MC 26.2 · Folia-Powered · Rust edition 2024',
-            'hero.subtitle': 'A high-performance Minecraft server core based on Folia, combining Rust native acceleration with deep technical compatibility.',
-            'hero.tagline': 'Rust Native Acceleration · Full Redstone Compatibility · Carpet Protocol Support · Fake Player System · ReplayMod Photographer',
-            'hero.btn.start': 'Quick Start',
-            'hero.btn.download': 'Download',
-            'hero.stats.license': 'License',
-            'hero.stats.runtime': 'Runtime',
-            'hero.stats.native': 'Native Engine',
-            'hero.stats.modules': 'Feature Patches',
-
-            'features.label': 'Core Features',
-            'features.title': 'Why Mili?',
-            'features.desc': 'An enhanced runtime built on Folia\u2019s region-based multithreading model',
-            'features.rust.title': 'Rust Native Acceleration',
-            'features.rust.desc': 'Bridges Rust native libraries via JNI (mili_optimizer.dll/.so/.dylib) to accelerate hot paths like entity frustum culling and TOML config I/O. Zero-copy DirectByteBuffer + Rayon parallelism \u2014 only M JNI calls per tick instead of N\u00D7M. Falls back to pure Java when unavailable.',
-            'features.toml.title': 'TOML Config System',
-            'features.toml.desc': 'Replaces NightConfig with Rust toml_edit engine, preserving comments, supporting hot-reload and recursive deletion. JSON batch transfer at the JNI boundary delivers significant read/write performance gains.',
-            'features.balancer.title': 'Folia Stability Fixes',
-            'features.balancer.desc': 'Region Balancer: shared thread pool + priority queue replaces per-region exclusive threads; lock-free sliding window tracks tick cost; adaptive TPS management; cross-region event queue; global UUID registry prevents collision; catch(Throwable) hardening prevents silent scheduler thread death from Errors.',
-            'features.redstone.title': 'Redstone & Technical Compatibility',
-            'features.redstone.desc': 'Full redstone fixes ported from Leaves/Lophine and adapted for Folia: update suppression (catch exception to prevent crash), redstone ignore upward updates, instant neighbor updater, legacy block onRemove behavior, wool hopper counter. Vanilla behavior preserved \u2014 technical machines run safely.',
-            'features.carpet.title': 'Carpet & Protocol Compatibility',
-            'features.carpet.desc': '50+ Carpet/TIS/AMS rule mappings with real-time TPS/mobcaps/counter HUD sync. TISCM, Jade, Syncmatica, Servux, XaeroMap, REI, BBOR, AppleSkin and more client mod protocols fully adapted.',
-            'features.storage.title': 'Fake Player & Photographer',
-            'features.storage.desc': 'Fake player system ported from Leaves: create/manage/remove fake players, persistent, inventory ops, action execution (attack, break, fish, jump, move, etc.) with full Java event API. ReplayMod photographer entity recording with Photographer / PhotographerManager API.',
-
-            'arch.label': 'Architecture',
-            'arch.title': 'Inheritance Chain',
-            'arch.desc': 'Multi-layer fork architecture based on the Hyacinthusweight patch system',
-            'arch.node.vanilla': 'Vanilla',
-            'arch.node.paper': 'Server Framework',
-            'arch.node.folia': 'Region Multithreading',
-            'arch.node.mili': 'Rust + Stability',
-            'arch.note': 'Mili was originally a derivative of Lophine/Luminol, but has now migrated to be directly based on Folia, with Luminol\u2019s optimization source code merged inline. (Luminol was deleted in a dispute with Canvas.)',
-            'arch.module.api': 'Public API and compatibility adapter layer, including Bot, Photographer, and event APIs',
-            'arch.module.server': 'Server core logic patches and enhancements, 121 feature patches',
-            'arch.module.native': 'Rust JNI native optimization module (toml_edit, serde, jni, rayon, edition 2024)',
-
-            'rust.label': 'Rust Engine',
-            'rust.title': 'Native Acceleration Architecture',
-            'rust.desc': 'Rust edition 2024 + JNI batch processing, zero-copy transfer, multi-core parallelism',
-            'rust.cull.title': 'Entity Frustum Culling',
-            'rust.cull.desc': '6-plane AABB frustum test. Java packs entity data into DirectByteBuffer, Rust reads memory directly via GetDirectBufferAddress. Only M JNI calls per tick (M = observer count) instead of N\u00D7M.',
-            'rust.toml.title': 'TOML Config Engine',
-            'rust.toml.desc': 'Rust toml_edit replaces NightConfig. On load, TOML is parsed to flattened JSON for Java; on save, JSON is received and written back as commented TOML. Supports hot-reload and recursive deletion.',
-            'rust.cross.title': 'Cross-Platform Native Library',
-            'rust.cross.desc': 'Auto-detects OS and extracts the matching native library from JAR: Windows .dll, Linux .so, macOS .dylib. Falls back to pure Java when missing. Standalone Rust build supports cargo clippy (0 warnings) and cargo test (28 unit tests).',
-            'rust.safety.title': 'Safety Design',
-            'rust.safety.1.title': 'catch_unwind Boundary Protection',
-            'rust.safety.1.desc': 'All JNI entry points wrapped with catch_unwind(AssertUnwindSafe(...)) to prevent Rust panics from crossing the JNI boundary into Java',
-            'rust.safety.2.title': '#[unsafe(no_mangle)]',
-            'rust.safety.2.desc': 'Export symbol declarations compliant with Rust edition 2024, explicitly marking unsafe intent',
-            'rust.safety.3.title': 'overflow-checks=true',
-            'rust.safety.3.desc': 'Arithmetic overflow checks enabled in Release builds, preventing undefined behavior from integer overflow',
-
-            'proto.label': 'Protocol Compatibility',
-            'proto.title': 'Full Client Protocol Support',
-            'proto.desc': '10+ client mod protocols natively supported, plug and play',
-            'proto.carpet': '50+ Carpet/TIS/AMS rule mappings, TPS/mobcaps/counter HUD sync',
-            'proto.tiscm': 'tiscm:network/v1, MSPT broadcast, handshake',
-            'proto.xaero': 'Xaero map channel support',
-            'proto.jade': 'Jade server-side data provider',
-            'proto.sync': 'Litematic synchronization',
-            'proto.servux': 'Servux client service',
-            'proto.rei': 'Roughly Enough Items server protocol',
-            'proto.bbor': 'Bounding Box Outline Reloaded',
-            'proto.appleskin': 'Hunger/saturation sync',
-            'proto.altblock': 'Accurate/Carpet/Litematica placement protocol',
-
-            'config.label': 'Config System',
-            'config.title': 'Six Category Config',
-            'config.desc': 'Two TOML config files covering performance to functionality',
-            'config.func.count': 'function',
-            'config.func.title': 'Functions',
-            'config.func.1': 'Fakeplayer (fake player system)',
-            'config.func.2': 'WoolHopperCounter (wool hopper counter)',
-            'config.func.3': 'ReplayAPI (ReplayMod cameraman)',
-            'config.func.4': 'LanguageConfig',
-            'config.func.5': 'ContainerExpansionConfig',
-            'config.func.6': 'RedstoneStats (redstone statistics)',
-            'config.exp.count': 'experiment',
-            'config.exp.title': 'Experimental',
-            'config.exp.1': 'RegionBalancerConfig (region load balancer)',
-            'config.exp.2': 'CrossRegionHelperConfig (cross-region event queue)',
-            'config.exp.3': 'GlobalEntitiesCounter (global entity counter)',
-            'config.exp.4': 'RayTrackingEntityTracker',
-            'config.exp.5': 'RedStoneConfig',
-            'config.exp.6': 'EntityDamageSourceTrace',
-            'config.opt.count': 'optimizations',
-            'config.opt.title': 'Optimizations',
-            'config.opt.1': 'AsyncPathfinding (async pathfinding)',
-            'config.opt.2': 'NetworkOptimizerConfig',
-            'config.opt.3': 'MmapRegionStorageConfig',
-            'config.opt.4': 'ChunkDeltaCompression',
-            'config.opt.5': 'DynamicViewDistance (dynamic view distance)',
-            'config.opt.6': 'EntityDirtyTracking',
-            'config.opt.7': 'VillagerOptimizer',
-            'config.fix.count': 'fixes',
-            'config.fix.title': 'Crash Fixes',
-            'config.fix.1': 'UpdateSuppressionCrashFixConfig',
-            'config.fix.2': 'PortalLinkFix',
-            'config.misc.count': 'misc',
-            'config.misc.title': 'Misc',
-            'config.carpet.count': 'carpet',
-            'config.carpet.title': 'Carpet Rule Mapping',
-            'config.carpet.1': 'CoreConfig (core rules)',
-            'config.carpet.2': 'GeneralCompatConfig (general compat)',
-            'config.carpet.3': '50+ Carpet/TIS/AMS rules',
-            'config.carpet.4': 'TPS/mobcaps/counter HUD',
-            'config.files': 'Config files: <code>mili_config.toml</code> (main config, fun.bm.mili.config.modules) and <code>mili_carpet_config.toml</code> (Carpet rules, fun.bm.mili.carpet.config.modules). Full config reference in Wiki.',
-
-            'qs.label': 'Quick Start',
-            'qs.title': 'Get Started',
-            'qs.desc': 'Build from source or download a pre-built release',
-            'qs.tab.build': 'Build from Source',
-            'qs.tab.download': 'Download Release',
-            'qs.build.s1.title': 'Clone Repository',
-            'qs.build.s2.title': 'Enable Long Paths (Windows)',
-            'qs.build.s3.title': 'Apply Patches',
-            'qs.build.s4.title': 'Inject Kotlin Support',
-            'qs.build.s5.title': 'Compile Rust Native Library',
-            'qs.build.s6.title': 'Build Paperclip JAR',
-            'qs.dl.s1.title': 'Download from GitHub Releases',
-            'qs.dl.s1.desc': 'Visit the Releases page and download the latest Paperclip JAR file.',
-            'qs.dl.s2.title': 'Requirements',
-            'qs.dl.s2.1': 'JDK 25 or higher (not JDK 21)',
-            'qs.dl.s2.3': '4+ core CPU recommended for Folia multithreading',
-            'qs.dl.s2.4': 'Rust stable (edition 2024) \u2014 optional, for compiling native optimization library',
-            'qs.dl.s3.title': 'Start Server',
-
-            'api.label': 'API',
-            'api.title': 'Dependency Setup',
-            'api.desc': 'Import Mili API via Maven repository for plugin development',
-            'api.tab.gradle': 'Gradle (Kotlin DSL)',
-            'api.tab.maven': 'Maven',
-            'api.note': 'API module path: <code>fun.bm.mili</code>. Includes Bot, Photographer, and event APIs. Use <code>compileOnly</code> (Gradle) or <code>provided</code> (Maven) scope for plugin development.',
-
-            'footer.desc': 'A high-performance Folia-based Minecraft server core. Rust native acceleration, full redstone compatibility, Carpet protocol support, fake player system.',
-            'footer.resources': 'Resources',
-            'footer.repo': 'GitHub Repo',
-            'footer.wiki': 'Wiki Docs',
-            'footer.contrib': 'Contributing Guide',
-            'footer.discord': 'Discord Community',
-            'footer.upstream': 'Upstream',
-            'footer.stack': 'Tech Stack',
-            'footer.luminol': 'Luminol (deleted)',
-            'footer.license': 'Licensed under GPL-3.0 · Contributors may opt for MIT',
-            'footer.copy': '\u00A9 2025 Mili Project. Thanks to PaperMC, LeavesMC, Lophine and all contributors.'
-        }
-    };
-
-    var LANG_KEY = 'mili-lang';
-    var root = document.documentElement;
-    var currentLang = localStorage.getItem(LANG_KEY) || 'zh';
-
-    function applyLang(lang) {
-        var dict = I18N[lang] || I18N.zh;
-        document.querySelectorAll('[data-i18n]').forEach(function (el) {
-            var key = el.getAttribute('data-i18n');
-            if (dict[key] !== undefined) {
-                el.innerHTML = dict[key];
-            }
-        });
-        root.setAttribute('data-lang', lang);
-        root.setAttribute('lang', lang === 'zh' ? 'zh-CN' : 'en');
-        localStorage.setItem(LANG_KEY, lang);
-        var btn = document.getElementById('langToggle');
-        if (btn) btn.textContent = lang === 'zh' ? 'EN' : '\u4E2D\u6587';
+    function switchTab(el, panelId) {
+        document.querySelectorAll('.qs-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.qs-panel').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+        document.getElementById('panel-' + panelId).classList.add('active');
     }
-
-    applyLang(currentLang);
-
-    var langToggle = document.getElementById('langToggle');
-    if (langToggle) {
-        langToggle.addEventListener('click', function () {
-            currentLang = currentLang === 'zh' ? 'en' : 'zh';
-            applyLang(currentLang);
-        });
-    }
-
-    /* ============================================================
-       Theme Management
-       ============================================================ */
-    var THEME_KEY = 'mili-theme';
-
-    function getPreferredTheme() {
-        var saved = localStorage.getItem(THEME_KEY);
-        if (saved) return saved;
-        return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
-    }
-    function applyTheme(theme) {
-        root.setAttribute('data-theme', theme);
-        localStorage.setItem(THEME_KEY, theme);
-    }
-    applyTheme(getPreferredTheme());
-
-    var themeToggle = document.getElementById('themeToggle');
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function () {
-            var current = root.getAttribute('data-theme');
-            applyTheme(current === 'dark' ? 'light' : 'dark');
-        });
-    }
-
-    /* ============================================================
-       Navbar Scroll Effect
-       ============================================================ */
-    var navbar = document.getElementById('navbar');
-    window.addEventListener('scroll', function () {
-        if (window.scrollY > 20) {
-            navbar.classList.add('scrolled');
-        } else {
-            navbar.classList.remove('scrolled');
-        }
-    }, { passive: true });
-
-    /* ============================================================
-       Mobile Navigation
-       ============================================================ */
-    var navMenuBtn = document.getElementById('navMenuBtn');
-    var navLinks = document.getElementById('navLinks');
-    if (navMenuBtn && navLinks) {
-        navMenuBtn.addEventListener('click', function () {
-            navMenuBtn.classList.toggle('open');
-            navLinks.classList.toggle('open');
-        });
-        navLinks.querySelectorAll('a').forEach(function (link) {
-            link.addEventListener('click', function () {
-                navMenuBtn.classList.remove('open');
-                navLinks.classList.remove('open');
-            });
-        });
-    }
-
-    /* ============================================================
-       Reveal on Scroll
-       ============================================================ */
-    var revealElements = document.querySelectorAll('.reveal');
-    if ('IntersectionObserver' in window) {
-        var observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    var el = entry.target;
-                    var delay = 0;
-                    var siblings = el.parentElement ? el.parentElement.querySelectorAll('.reveal') : [];
-                    for (var i = 0; i < siblings.length; i++) {
-                        if (siblings[i] === el) { delay = i * 80; break; }
-                    }
-                    (function (el, delay) {
-                        setTimeout(function () { el.classList.add('visible'); }, delay);
-                    })(el, delay);
-                    observer.unobserve(el);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-        revealElements.forEach(function (el) { observer.observe(el); });
-    } else {
-        revealElements.forEach(function (el) { el.classList.add('visible'); });
-    }
-
-    /* ============================================================
-       Tab Switching (Quick Start + API)
-       ============================================================ */
-    var allTabs = document.querySelectorAll('.qs-tab');
-    allTabs.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            var target = tab.getAttribute('data-tab');
-            var parent = tab.closest('.section');
-            if (!parent) return;
-            parent.querySelectorAll('.qs-tab').forEach(function (t) { t.classList.remove('active'); });
-            parent.querySelectorAll('.qs-panel, .api-panel').forEach(function (p) { p.classList.remove('active'); });
-            tab.classList.add('active');
-            var panel = parent.querySelector('[data-panel="' + target + '"]');
-            if (panel) {
-                panel.classList.add('active');
-                panel.querySelectorAll('.reveal').forEach(function (el, i) {
-                    el.classList.remove('visible');
-                    setTimeout(function () { el.classList.add('visible'); }, i * 80);
-                });
-            }
-        });
-    });
-
-    /* ============================================================
-       Smooth Scroll
-       ============================================================ */
-    document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
-        anchor.addEventListener('click', function (e) {
-            var href = this.getAttribute('href');
-            if (href === '#' || href.length <= 1) return;
-            var target = document.querySelector(href);
-            if (target) {
-                e.preventDefault();
-                var offset = 70;
-                var top = target.getBoundingClientRect().top + window.scrollY - offset;
-                window.scrollTo({ top: top, behavior: 'smooth' });
-            }
-        });
-    });
-
-    /* ============================================================
-       Active Nav Link Highlight
-       ============================================================ */
-    var sections = document.querySelectorAll('section[id]');
-    var navLinkEls = document.querySelectorAll('.nav-link[href^="#"]');
-    function updateActiveNavLink() {
-        var scrollPos = window.scrollY + 100;
-        var currentId = '';
-        sections.forEach(function (section) {
-            var top = section.offsetTop;
-            var height = section.offsetHeight;
-            if (scrollPos >= top && scrollPos < top + height) {
-                currentId = section.getAttribute('id');
-            }
-        });
-        navLinkEls.forEach(function (link) {
-            var href = link.getAttribute('href');
-            if (href === '#' + currentId) {
-                link.classList.add('active');
-            } else {
-                link.classList.remove('active');
-            }
-        });
-    }
-    window.addEventListener('scroll', updateActiveNavLink, { passive: true });
-
-    /* ============================================================
-       Mobile Overflow Guard — JS Adaptive Clamping
-       ============================================================ */
-    function clampOverflow() {
-        var vw = window.innerWidth;
-        var all = document.querySelectorAll('*');
-        for (var i = 0; i < all.length; i++) {
-            var el = all[i];
-            var w = el.getBoundingClientRect().width;
-            if (w > vw + 2) {
-                el.style.maxWidth = '100%';
-                el.style.width = 'auto';
-                if (window.getComputedStyle(el).whiteSpace === 'pre' ||
-                    window.getComputedStyle(el).whiteSpace === 'nowrap') {
-                    el.style.overflowX = 'auto';
-                    el.style.overflowY = 'hidden';
-                    el.style.display = 'block';
-                    el.style.webkitOverflowScrolling = 'touch';
-                }
-            }
-        }
-    }
-
-    function debounce(fn, delay) {
-        var timer;
-        return function () {
-            clearTimeout(timer);
-            timer = setTimeout(fn, delay);
-        };
-    }
-
-    if (document.readyState === 'complete') {
-        clampOverflow();
-    } else {
-        window.addEventListener('load', clampOverflow);
-    }
-    setTimeout(clampOverflow, 300);
-    setTimeout(clampOverflow, 1000);
-    window.addEventListener('resize', debounce(clampOverflow, 150));
-    window.addEventListener('orientationchange', function () {
-        setTimeout(clampOverflow, 300);
-    });
-
-    allTabs.forEach(function (tab) {
-        tab.addEventListener('click', function () {
-            setTimeout(clampOverflow, 100);
-        });
-    });
-
-    if (langToggle) {
-        langToggle.addEventListener('click', function () {
-            setTimeout(clampOverflow, 100);
-        });
-    }
-
-})();
 </script>
+
 </body>
 </html>
