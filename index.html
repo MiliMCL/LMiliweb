@@ -793,7 +793,7 @@
         <span class="dot"></span>
         基于 Folia 区域多线程调度
     </div>
-    <h1><span class="gradient-text">Mili</span>（米粒）</h1>
+    <h1><span class="gradient-text">LMili</span>（米粒）</h1>
     <p class="hero-tagline">
         基于 Folia 的高性能 Minecraft 服务端核心：<br>
         更纯粹的区域多线程体验，更多 API，更稳定
@@ -813,7 +813,7 @@
 <div class="fork-chain-section">
     <div class="section-header">
         <h2>继承链</h2>
-        <p>Mili 站在Folia 的肩膀上，专注于在区域多线程模型上提供更多能力</p>
+        <p>LMili 站在Folia 的肩膀上，专注于在区域多线程模型上提供更多能力</p>
     </div>
     <div class="fork-chain">
         <div class="fork-chain-item">
@@ -1037,7 +1037,7 @@
 <section id="quickstart">
     <div class="section-header">
         <h2>快速开始</h2>
-        <p>从源码构建 Mili 服务端核心</p>
+        <p>从源码构建 LMili 服务端核心</p>
     </div>
     <div class="quick-start-content">
         <div class="qs-tabs">
@@ -1093,7 +1093,7 @@ dependencies {
 <span class="qs-keyword">&lt;dependencies&gt;</span>
   <span class="qs-keyword">&lt;dependency&gt;</span>
     <span class="qs-keyword">&lt;groupId&gt;</span>fun.bm.mili<span class="qs-keyword">&lt;/groupId&gt;</span>
-    <span class="qs-keyword">&lt;artifactId&gt;</span>mili-api<span class="qs-keyword">&lt;/artifactId&gt;</span>
+    <span class="qs-keyword">&lt;artifactId&gt;</span>lmili-api<span class="qs-keyword">&lt;/artifactId&gt;</span>
     <span class="qs-keyword">&lt;version&gt;</span>26.2-R0.1-SNAPSHOT<span class="qs-keyword">&lt;/version&gt;</span>
     <span class="qs-keyword">&lt;scope&gt;</span>provided<span class="qs-keyword">&lt;/scope&gt;</span>
   <span class="qs-keyword">&lt;/dependency&gt;</span>
@@ -1109,10 +1109,10 @@ dependencies {
         <p>模块化设计，职责清晰分离</p>
     </div>
     <div class="structure-card">
-<pre><span class="dir">Mili/</span>
-├── <span class="dir">mili-api/</span>                  <span class="comment"># Mili API 模块</span>
+<pre><span class="dir">LMili/</span>
+├── <span class="dir">leaves-api/</span>                  <span class="comment"># Leaves API 模块</span>
 │   └── src/main/java/         <span class="comment">#   事件 API、Photographer、Bytebuf</span>
-├── <span class="dir">mili-server/</span>               <span class="comment"># Mili 服务端核心</span>
+├── <span class="dir">lmili-server/</span>               <span class="comment"># LMili 服务端核心</span>
 │   ├── minecraft-patches/     <span class="comment">#   97 个特征补丁（features/）</span>
 │   ├── paper-patches/         <span class="comment">#   Paper API/Server 层补丁</span>
 │   └── src/main/
@@ -1125,7 +1125,7 @@ dependencies {
 │           ├── portal/        <span class="comment">#     传送门管理</span>
 │           ├── utils/         <span class="comment">#     工具类（区域调度、网络优化、内存管理等）</span>
 │           └── villager/      <span class="comment">#     村民优化器</span>
-├── <span class="dir">lmili-api/</span>                 <span class="comment"># LMili 附加 API 源（包名 fun.bm.mili.lmili）</span>
+├── <span class="dir">lmili-api/</span>                 <span class="comment"># LMili 附加 API 源（真正实现新调度器和对外api的地方）</span>
 ├── <span class="dir">folia-server/</span>              <span class="comment"># Folia 子模块（上游，不直接修改）</span>
 ├── <span class="dir">paper-server/</span>              <span class="comment"># Paper 服务器（补丁应用目标）</span>
 ├── <span class="dir">paper-api/</span>                 <span class="comment"># Paper API（补丁应用目标）</span>
@@ -1232,10 +1232,10 @@ dependencies {
         <p>项目源码、上游仓库与文档</p>
     </div>
     <div class="links-grid">
-        <a href="https://github.com/xucy10/Mili" class="link-card" target="_blank" rel="noopener">
+        <a href="https://github.com/MiliMCL/LMili" class="link-card" target="_blank" rel="noopener">
             <div class="lc-icon">&#128187;</div>
             <div class="lc-info">
-                <h4>Mili GitHub</h4>
+                <h4>LMili GitHub</h4>
                 <p>本项目仓库</p>
             </div>
         </a>
@@ -1282,11 +1282,11 @@ dependencies {
     <div class="footer-brand">Mili（米粒）</div>
     <p class="footer-text">基于 Folia 的高性能 Minecraft 服务端核心</p>
     <div class="footer-links">
-        <a href="https://github.com/xucy10/Mili" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/xucy10/Mili/blob/main/README.md">README</a>
-        <a href="https://github.com/xucy10/Mili/blob/main/docs/CONTRIBUTING.md">贡献指南</a>
-        <a href="https://github.com/xucy10/Mili/blob/main/docs/WIKI.md">Wiki</a>
-        <a href="https://github.com/xucy10/Mili/issues">Issue</a>
+        <a href="https://github.com/MiliMCL/LMili" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/MiliMCL/LMili/blob/main/README.md">README</a>
+        <a href="https://github.com/MiliMCL/LMili/blob/main/docs/CONTRIBUTING.md">贡献指南</a>
+        <a href="https://github.com/MiliMCL/LMili/blob/main/docs/WIKI.md">Wiki</a>
+        <a href="https://github.com/MiliMCL/LMili/issues">Issue</a>
     </div>
     <div class="footer-license">
         本项目遵循 GPL-3.0 许可证 | Minecraft 26.2 | JDK 25+<br>
